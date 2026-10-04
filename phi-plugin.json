@@ -1,7 +1,14 @@
 {
+  "schema": "phi.widget-plugin",
+  "schemaVersion": 1,
   "name": "widgetphi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "entry": "src/index.js",
   "handles": ["build_widget"],
-  "widgets": ["stick-ticket"]
+  "widgets": ["stick-ticket"],
+  "designTokens": {
+    "source": "www-infinity4/Omni-Phi/assets/style.css",
+    "adapter": "src/styles/tokens.js"
+  },
+  "consumers": ["LayaPhi", "DesiPhi", "Code Phi"]
 }

@@ -1,0 +1,8 @@
+{
+  "name": "widgetphi",
+  "version": "0.1.0",
+  "description": "Widget plug-in for the Phi system (scaffold).",
+  "main": "src/index.js",
+  "scripts": { "test": "node --test test/*.test.js" },
+  "license": "UNLICENSED"
+}

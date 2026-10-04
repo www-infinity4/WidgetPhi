@@ -1,0 +1,7 @@
+{
+  "name": "widgetphi",
+  "version": "0.1.0",
+  "entry": "src/index.js",
+  "handles": ["build_widget"],
+  "widgets": ["stick-ticket"]
+}

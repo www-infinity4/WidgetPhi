@@ -1,7 +1,8 @@
 {
   "name": "widgetphi",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "entry": "src/index.js",
+  "browserRuntime": "browser/widgetphi-stock.js",
   "handles": ["build_widget"],
-  "widgets": ["stick-ticket"]
+  "widgets": ["stick-ticket", "stock-card", "market-ticker", "stock-wallet"]
 }

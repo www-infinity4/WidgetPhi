@@ -10,7 +10,7 @@ test('builds a stick ticket', () => {
 });
 
 test('registers stock widgets', () => {
-  assert.deepEqual(plugin.list(), ['stick-ticket', 'stock-card', 'market-ticker', 'stock-wallet']);
+  assert.deepEqual(plugin.list(), ['stick-ticket', 'stock-card', 'market-ticker', 'stock-wallet', 'podcast-card']);
 });
 
 test('builds an escaped stock card with provider hook', () => {
@@ -34,4 +34,21 @@ test('builds a market ticker', () => {
 
 test('rejects unknown widget', () => {
   assert.throws(() => plugin.handle({ type: 'build_widget', widget: 'nope' }));
+});
+
+test('podcast card first episode free and later access requires wallet ledger',()=>{
+ const result=plugin.handle({type:'build_widget',widget:'podcast-card',spec:{
+ title:'Fred Spaces',host:'Fred Krueger',priceStarCoins:3,creatorWalletId:'verified-wallet-example',
+ episodes:[{title:'Bitcoin and Coffee',sourceUrl:'https://x.com/i/spaces/1OyKAjYPeXqGb'},
+ {title:'A second show',sourceUrl:'https://x.com/i/spaces/1MYxNlwEqYyGw'}]}}).html;
+ assert.match(result,/First episode free/);
+ assert.match(result,/Next episode · 3/);
+ assert.match(result,/wallet verification pending/);
+ assert.match(result,/Open original episode/);
+ assert.doesNotMatch(result,/<audio /);
+});
+test('podcast rejects unsafe sources and non-approved audio',()=>{
+ assert.throws(()=>plugin.handle({type:'build_widget',widget:'podcast-card',spec:{url:'javascript:alert(1)'}}));
+ assert.throws(()=>plugin.handle({type:'build_widget',widget:'podcast-card',spec:{url:'https://x.com/i/spaces/ABC',priceStarCoins:-3}}));
+ assert.doesNotMatch(plugin.handle({type:'build_widget',widget:'podcast-card',spec:{url:'https://example.com/show',audioUrl:'https://example.com/audio.mp3'}}).html,/<audio /);
 });

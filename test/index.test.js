@@ -10,7 +10,7 @@ test('builds a stick ticket', () => {
 });
 
 test('registers stock widgets', () => {
-  assert.deepEqual(plugin.list(), ['stick-ticket', 'stock-card', 'market-ticker', 'stock-wallet', 'podcast-card']);
+  assert.deepEqual(plugin.list(), ['stick-ticket', 'stock-card', 'market-ticker', 'stock-wallet', 'podcast-card', 'video-feed']);
 });
 
 test('builds an escaped stock card with provider hook', () => {
@@ -51,4 +51,17 @@ test('podcast rejects unsafe sources and non-approved audio',()=>{
  assert.throws(()=>plugin.handle({type:'build_widget',widget:'podcast-card',spec:{url:'javascript:alert(1)'}}));
  assert.throws(()=>plugin.handle({type:'build_widget',widget:'podcast-card',spec:{url:'https://x.com/i/spaces/ABC',priceStarCoins:-3}}));
  assert.doesNotMatch(plugin.handle({type:'build_widget',widget:'podcast-card',spec:{url:'https://example.com/show',audioUrl:'https://example.com/audio.mp3'}}).html,/<audio /);
+});
+
+test('video feed uses privacy-enhanced YouTube playlist embed and refuses invented video',()=>{
+ const widget=plugin.handle({type:'build_widget',widget:'video-feed',spec:{title:'Pujols film and history',videos:[
+  {url:'https://www.youtube.com/playlist?list=PLabcdefghijklmnopqrstu123',title:'Verified Playlist'},
+  {url:'https://www.youtube.com/watch?v=dQw4w9WgXcQ',title:'Known Video'},
+  {url:'https://example.com/something',title:'Do not include'}
+ ]}}).html;
+ assert.match(widget,/youtube-nocookie.com\/embed\/videoseries/);
+ assert.match(widget,/youtube-nocookie.com\/embed\/dQw4w9WgXcQ/);
+ assert.match(widget,/Verified Playlist/);
+ assert.doesNotMatch(widget,/Do not include/);
+ assert.doesNotMatch(widget,/<iframe/);
 });

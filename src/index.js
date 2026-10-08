@@ -11,6 +11,7 @@ register(require('./widgets/stick-ticket'));
 register(require('./widgets/stock-card'));
 register(require('./widgets/market-ticker'));
 register(require('./widgets/stock-wallet'));
+register(require('./widgets/podcast-card'));
 
 function handle(request = {}) {
   if (request.type !== 'build_widget') throw new Error(`Unsupported request type: ${request.type}`);

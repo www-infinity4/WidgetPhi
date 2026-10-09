@@ -10,7 +10,7 @@ test('builds a stick ticket', () => {
 });
 
 test('registers stock widgets', () => {
-  assert.deepEqual(plugin.list(), ['stick-ticket', 'stock-card', 'market-ticker', 'stock-wallet', 'podcast-card', 'video-feed']);
+  assert.deepEqual(plugin.list(), ['stick-ticket', 'stock-card', 'market-ticker', 'stock-wallet', 'podcast-card', 'video-feed', 'seasonal-card']);
 });
 
 test('builds an escaped stock card with provider hook', () => {

@@ -1,8 +1,24 @@
 {
   "name": "widgetphi",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "entry": "src/index.js",
   "browserRuntime": "browser/widgetphi-stock.js",
-  "handles": ["build_widget"],
-  "widgets": ["stick-ticket", "stock-card", "market-ticker", "stock-wallet"]
+  "handles": [
+    "build_widget"
+  ],
+  "widgets": [
+    "stick-ticket",
+    "stock-card",
+    "market-ticker",
+    "stock-wallet",
+    "podcast-card",
+    "video-feed",
+    "seasonal-card"
+  ],
+  "browserRuntimes": [
+    "browser/widgetphi-stock.js",
+    "browser/widgetphi-video.js",
+    "browser/widgetphi-podcast.js",
+    "browser/widgetphi-seasonal.js"
+  ]
 }

@@ -29,7 +29,7 @@
   var b=e.target.closest('[data-ph-action]');if(!b)return;
   var n=b.closest('[data-widgetphi-seasonal]');if(!n)return;
   var kind=b.dataset.phAction;
-  if(kind==='close'){stop(n);try{root.sessionStorage.setItem(dismissKey+n.dataset.phId,'1');}catch(e){}n.hidden=true;event(n,'dismiss');}
+  if(kind==='close'){stop(n);try{root.sessionStorage.setItem(dismissKey+n.dataset.phId,'1');}catch(e){}n.hidden=true;event(n,'dismiss');var dlg=n.closest('dialog[data-widgetphi-seasonal-dialog]');if(dlg){dlg.close();dlg.remove();}}
   if(kind==='door'){var surprises=['a golden pumpkin! 🎃','a friendly ghost! 👻','a mysterious black cat! 🐈‍⬛'];status(n,'Behind the door: '+surprises[Math.floor(Math.random()*surprises.length)]);}
   if(kind==='sound')sound(n);
   if(kind==='stop'){stop(n);status(n,'Sound stopped.');}
@@ -55,6 +55,26 @@
    try{if(n.dataset.phPopup==='1'&&root.sessionStorage.getItem(dismissKey+n.dataset.phId)==='1')n.hidden=true;}catch(e){}
   });
  }
- root.WidgetPhiSeasonal={inSeason:inSeason,chooseMode:chooseMode,scan:scan};
+ function openPopup(node,opts){
+  opts=opts||{};
+  if(!node||!node.matches||!node.matches('[data-widgetphi-seasonal]'))return false;
+  if(node.dataset.phSeasonal==='1'&&!opts.preview&&!inSeason(new Date()))return false;
+  if(!root.HTMLDialogElement)return false;
+  try{if(root.sessionStorage.getItem(dismissKey+node.dataset.phId)==='1'&&!opts.preview)return false;}catch(e){}
+  if(document.querySelector('dialog[data-widgetphi-seasonal-dialog][open]'))return false;
+  var dialog=document.createElement('dialog');
+  dialog.dataset.widgetphiSeasonalDialog='1';
+  dialog.setAttribute('aria-label','Halloween Phi activity');
+  dialog.style.cssText='max-width:min(92vw,620px);max-height:90vh;overflow:auto;padding:0;border:0;border-radius:20px;background:transparent;box-shadow:0 10px 65px #0008';
+  dialog.appendChild(node);document.body.appendChild(dialog);
+  node.dataset.phPopup='1';node.hidden=false;
+  dialog.addEventListener('close',function(){
+    stop(node);
+    if(!node.hidden){node.hidden=true;try{root.sessionStorage.setItem(dismissKey+node.dataset.phId,'1');}catch(e){}event(node,'dismiss');}
+    dialog.remove();
+  },{once:true});
+  dialog.showModal();return true;
+ }
+ root.WidgetPhiSeasonal={inSeason:inSeason,chooseMode:chooseMode,scan:scan,openPopup:openPopup};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){scan();});else scan();
 })(window);

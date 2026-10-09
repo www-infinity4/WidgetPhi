@@ -13,6 +13,7 @@ register(require('./widgets/market-ticker'));
 register(require('./widgets/stock-wallet'));
 register(require('./widgets/podcast-card'));
 register(require('./widgets/video-feed'));
+register(require('./widgets/seasonal-card'));
 
 function handle(request = {}) {
   if (request.type !== 'build_widget') throw new Error(`Unsupported request type: ${request.type}`);

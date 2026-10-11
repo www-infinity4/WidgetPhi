@@ -46,3 +46,24 @@ test('unsupported concepts are not mislabeled working software',()=>{
  assert.equal(result.status,'needs_adapter');
  assert.throws(()=>preview(result),/No working card/);
 });
+
+test('Shop Phi bot assembles an actual sponsored store card from explicit seller sources',()=>{
+ const req=requestFromIssue(issue('Shop Phi Collection',[
+  'Title: My Creator Store','Curator: Galactic Picks',
+  'Item: Star charts | https://example.com/charts',
+  'Ad: Telescope maker | https://seller.example/offer | Telescope Company'
+ ].join('\n')));
+ const card=build(req);
+ assert.equal(card.status,'built');
+ assert.equal(card.widget,'shop-phi');
+ assert.match(card.html,/Sponsored · Telescope Company|Star charts/);
+ assert.match(card.html,/Next curated pick · 1 StarCoin/);
+ assert.match(card.html,/disabled/);
+ assert.doesNotMatch(card.html,/Telescope maker/,'later selections must not leak before settlement');
+});
+test('Shop Phi bot rejects unsourced or undisclosed advertisements',()=>{
+ const no=build(requestFromIssue(issue('Shop Phi store','A curator wants an advertisement card but has no item links yet')));
+ assert.equal(no.status,'needs_source_data');
+ const bad=build(requestFromIssue(issue('Shop Phi store','Ad: Product | https://example.org/item')));
+ assert.equal(bad.status,'needs_source_data');
+});

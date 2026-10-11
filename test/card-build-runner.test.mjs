@@ -8,7 +8,8 @@ test('bot turns user-specified symbols into existing functional stock ticker',()
  assert.equal(a.status,'built');
  assert.equal(a.widget,'market-ticker');
  assert.match(a.html,/data-widgetphi-tradingview="ticker"/);
- assert.match(a.html,/NASDAQ:AAPL/);
+ const config=JSON.parse(decodeURIComponent(a.html.match(/data-config="([^"]+)"/)[1]));
+ assert.deepEqual(config.symbols.map(x=>x.proName),['NASDAQ:AAPL','NASDAQ:MSFT']);
  assert.match(preview(a),/widgetphi-stock.js/);
  assert.equal(a.paid,false);
 });

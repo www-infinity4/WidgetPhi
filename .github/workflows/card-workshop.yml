@@ -1,5 +1,11 @@
 name: WidgetPhi Robot Card Workshop
 on:
+  pull_request:
+    paths:
+      - 'bots/**'
+      - 'test/**'
+      - 'package.json'
+      - '.github/workflows/card-workshop.yml'
   issues:
     types: [opened, edited, reopened]
   repository_dispatch:

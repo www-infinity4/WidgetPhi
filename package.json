@@ -3,6 +3,8 @@
   "version": "0.2.0",
   "description": "Reusable widget plug-ins for the Phi system, including market cards and tickers.",
   "main": "src/index.js",
-  "scripts": { "test": "node --test test/*.test.js" },
+  "scripts": {
+    "test": "node --test test/*.test.js test/*.test.mjs"
+  },
   "license": "UNLICENSED"
 }

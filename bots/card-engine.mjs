@@ -22,7 +22,7 @@ export const sourcePathAllowed = (path) =>
  /(card|viewer|search|story|radio|reader|article|media|player|upload|builder|index|image)/i.test(path);
 
 export function slugify(value){
- const s=plain(value,140).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+ const s=plain(value,140).replace(/([a-z\d])([A-Z])/g,'$1-$2').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
   .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,56).replace(/-$/,'');
  return s.length>1&&SAFE.test(s)?s:null;
 }

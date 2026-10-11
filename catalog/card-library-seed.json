@@ -1,0 +1,715 @@
+{
+  "schema": "phi.card-library.seed/v1",
+  "generatedFrom": "catalog/cards.json @ main (2026-10-11)",
+  "items": [
+    {
+      "id": "search-engine",
+      "name": "Search Engine",
+      "category": "Search & Research",
+      "description": "Search-first, image-first, AI-overview-first or links-only with research saved into your own website.",
+      "sourceRepo": "www-infinity4/QuantaPhi",
+      "sourcePath": "index.html",
+      "readiness": "integration",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Search My Site"
+        },
+        {
+          "key": "mode",
+          "label": "Default search mode",
+          "type": "select",
+          "options": [
+            "ai-overview",
+            "images-first",
+            "links-only",
+            "quanta-style"
+          ],
+          "default": "quanta-style"
+        },
+        {
+          "key": "siteIndex",
+          "label": "Your site research keywords (comma-separated)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "captureResearch",
+          "label": "Attach approved research to this site",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "key": "showViewer",
+          "label": "Include Research Viewer card",
+          "type": "boolean",
+          "default": true
+        }
+      ],
+      "keywords": [
+        "search",
+        "website search",
+        "AI overview",
+        "images",
+        "research"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "research-viewer",
+      "name": "Research Viewer",
+      "category": "Search & Research",
+      "description": "Open supported research inside the website, record clicks with permission, and keep source links when a provider blocks framing.",
+      "sourceRepo": "www-infinity4/QuantaPhi",
+      "sourcePath": "index.html",
+      "readiness": "integration",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Research Viewer"
+        },
+        {
+          "key": "mode",
+          "label": "Viewing mode",
+          "type": "select",
+          "options": [
+            "in-site-content",
+            "source-link"
+          ],
+          "default": "in-site-content"
+        },
+        {
+          "key": "trackClicks",
+          "label": "Record site-approved interactions",
+          "type": "boolean",
+          "default": true
+        }
+      ],
+      "keywords": [
+        "research",
+        "viewer",
+        "source",
+        "webpage"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "scholastic-reader",
+      "name": "Scholastic Reader",
+      "category": "Reading & Stories",
+      "description": "A customizable learning and educational reading shelf with your own lessons and sources.",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "catalog/embed.js",
+      "readiness": "template",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "My Learning Reader"
+        },
+        {
+          "key": "audience",
+          "label": "Audience",
+          "type": "select",
+          "options": [
+            "all-ages",
+            "elementary",
+            "teen",
+            "adult"
+          ],
+          "default": "all-ages"
+        },
+        {
+          "key": "index",
+          "label": "Learning topics (comma-separated)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        }
+      ],
+      "keywords": [
+        "reader",
+        "education",
+        "school",
+        "lessons"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "asteroid-reads",
+      "name": "Asteroid Reads",
+      "category": "Reading & Stories",
+      "description": "Build an astronomy/asteroid reader around verified research and user-selected space topics.",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "catalog/embed.js",
+      "readiness": "template",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Asteroid Reads"
+        },
+        {
+          "key": "index",
+          "label": "Space research index (comma-separated)",
+          "type": "text",
+          "default": "asteroids,meteorites,solar system"
+        },
+        {
+          "key": "sourceRule",
+          "label": "Source rule",
+          "type": "select",
+          "options": [
+            "cited-sources-only",
+            "owner-approved-sources"
+          ],
+          "default": "cited-sources-only"
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        }
+      ],
+      "keywords": [
+        "asteroid",
+        "astronomy",
+        "space",
+        "reader"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "infinite-stories",
+      "name": "Reads & Realms — Infinite Stories",
+      "category": "Reading & Stories",
+      "description": "Use your own index, genres and writing rules to build a distinct story world, rather than sharing the owner's story dataset.",
+      "sourceRepo": "www-infinity4/QuantaPhi",
+      "sourcePath": "infinite-book.js",
+      "readiness": "template",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Reader brand",
+          "type": "text",
+          "default": "My Infinite Reader"
+        },
+        {
+          "key": "index",
+          "label": "Your story ideas and index (comma-separated)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "genres",
+          "label": "Story categories (comma-separated)",
+          "type": "text",
+          "default": "mystery,adventure"
+        },
+        {
+          "key": "writerGuidance",
+          "label": "Original writing guidance",
+          "type": "textarea",
+          "default": "Create original stories grounded in the owner's selected themes. Cite factual claims."
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        },
+        {
+          "key": "priceStarCoins",
+          "label": "Proposed StarCoins per unlock",
+          "type": "number",
+          "min": 0,
+          "max": 100,
+          "default": 0
+        }
+      ],
+      "keywords": [
+        "stories",
+        "writing",
+        "books",
+        "reads and realms"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "story-writer",
+      "name": "Story Writer",
+      "category": "Reading & Stories",
+      "description": "Turn an uploaded or approved image, topic, or site index into a user-owned original story draft.",
+      "sourceRepo": "www-infinity4/QuantaPhi",
+      "sourcePath": "story-writer.js",
+      "readiness": "integration",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Story Writer"
+        },
+        {
+          "key": "index",
+          "label": "Themes and source index",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "allowImageInput",
+          "label": "Allow user-supplied image",
+          "type": "boolean",
+          "default": true
+        }
+      ],
+      "keywords": [
+        "writer",
+        "stories",
+        "image to story"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "infinity-radio",
+      "name": "Infinity Radio",
+      "category": "Media & Entertainment",
+      "description": "An embeddable curated audio station with authorized source recordings and site-specific programming.",
+      "sourceRepo": "www-infinity4/QuantaPhi",
+      "sourcePath": "index.html",
+      "readiness": "integration",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Station name",
+          "type": "text",
+          "default": "My Radio"
+        },
+        {
+          "key": "index",
+          "label": "Artists, genres and authorized feed index",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "autoplay",
+          "label": "Autoplay",
+          "type": "boolean",
+          "default": false
+        }
+      ],
+      "keywords": [
+        "radio",
+        "music",
+        "song",
+        "listen"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "media-star",
+      "name": "Media Star",
+      "category": "Media & Entertainment",
+      "description": "A renamable, Avatar-style curated gallery/player for collected images, audio, video and episodes, with source-verified playback and owner-specific storage.",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "src/widgets/media-star.js",
+      "readiness": "template",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Show brand",
+          "type": "text",
+          "default": "My Media Star"
+        },
+        {
+          "key": "index",
+          "label": "Approved hosts and episode URLs",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "shuffle",
+          "label": "Shuffle without repeats",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        },
+        {
+          "key": "priceStarCoins",
+          "label": "Proposed creator curation price (whole StarCoins)",
+          "type": "number",
+          "min": 0,
+          "max": 100,
+          "default": 1
+        },
+        {
+          "key": "mediaKind",
+          "label": "Media collection type",
+          "type": "select",
+          "options": [
+            "mixed",
+            "audio",
+            "video",
+            "art-gallery"
+          ],
+          "default": "mixed"
+        },
+        {
+          "key": "avatarLabel",
+          "label": "Avatar / host display",
+          "type": "text",
+          "default": "My Curator"
+        },
+        {
+          "key": "theme",
+          "label": "Card atmosphere",
+          "type": "select",
+          "options": [
+            "sun-gold",
+            "oracle-purple",
+            "gallery-white",
+            "deep-night"
+          ],
+          "default": "sun-gold"
+        },
+        {
+          "key": "sourceRule",
+          "label": "Playback strategy",
+          "type": "select",
+          "options": [
+            "official-player-first",
+            "original-link-first"
+          ],
+          "default": "official-player-first"
+        }
+      ],
+      "keywords": [
+        "media",
+        "video",
+        "audio",
+        "gallery",
+        "music",
+        "spaces"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "podcast-card",
+      "name": "Podcast / Spaces",
+      "category": "Media & Entertainment",
+      "description": "Existing episode card shell with attribution, verified source links and wallet settlement gates.",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "src/widgets/podcast-card.js",
+      "readiness": "existing",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Show name",
+          "type": "text",
+          "default": "My Podcast"
+        },
+        {
+          "key": "index",
+          "label": "Authorized episode URLs",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        }
+      ],
+      "keywords": [
+        "podcast",
+        "spaces",
+        "episode",
+        "audio"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "video-feed",
+      "name": "Video Feed",
+      "category": "Media & Entertainment",
+      "description": "Existing video widget scaffold, using verifiable licensed or supported provider URLs.",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "src/widgets/video-feed.js",
+      "readiness": "existing",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Feed name",
+          "type": "text",
+          "default": "My Videos"
+        },
+        {
+          "key": "index",
+          "label": "Approved video links",
+          "type": "textarea",
+          "default": ""
+        }
+      ],
+      "keywords": [
+        "video",
+        "youtube",
+        "vimeo",
+        "movies"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "stock-card",
+      "name": "Stock Card",
+      "category": "Markets & Utilities",
+      "description": "Existing attributed stock display and Phi sharing/collecting shell.",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "src/widgets/stock-card.js",
+      "readiness": "existing",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "My Stock"
+        },
+        {
+          "key": "index",
+          "label": "Exchange and ticker",
+          "type": "text",
+          "default": "NASDAQ:GOOGL"
+        }
+      ],
+      "keywords": [
+        "stock",
+        "stocks",
+        "share price",
+        "equities",
+        "quote"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "market-ticker",
+      "name": "Market Ticker",
+      "category": "Markets & Utilities",
+      "description": "Existing reusable market ticker using attributed third-party embeds.",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "src/widgets/market-ticker.js",
+      "readiness": "existing",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Ticker name",
+          "type": "text",
+          "default": "Market Watch"
+        },
+        {
+          "key": "index",
+          "label": "Symbols (comma-separated)",
+          "type": "text",
+          "default": "NASDAQ:GOOGL,NASDAQ:MSFT"
+        }
+      ],
+      "keywords": [
+        "stock ticker",
+        "ticker",
+        "stocks",
+        "market ticker",
+        "symbols"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "card-builder-desk",
+      "name": "Card Builder Desk",
+      "category": "Search & Research",
+      "description": "A reusable card inside any Phi site for designing and requesting new reusable WidgetPhi cards; let owner name the card, describe its behavior, choose existing enhancements or new builds, and send authenticated, source-linked build requests to the WidgetPhi rob",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "catalog/index.html",
+      "readiness": "template",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Card Builder Desk"
+        },
+        {
+          "key": "index",
+          "label": "Owner content and topic index",
+          "type": "textarea",
+          "default": ""
+        }
+      ],
+      "keywords": [
+        "builder",
+        "create",
+        "card",
+        "widget"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "news-phi",
+      "name": "News Phi Headlines",
+      "category": "Search & Research",
+      "description": "A configurable news headline reader card; adapter and verified source ingestion are still being built.",
+      "sourceRepo": "www-infinity4/News-Phi",
+      "sourcePath": "",
+      "readiness": "candidate",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "My News"
+        },
+        {
+          "key": "topics",
+          "label": "Topics",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "layout",
+          "label": "Layout",
+          "type": "select",
+          "options": [
+            "headlines",
+            "big-image-cards"
+          ],
+          "default": "big-image-cards"
+        }
+      ],
+      "keywords": [
+        "news",
+        "headlines",
+        "articles",
+        "press"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    },
+    {
+      "id": "bitcoin-crusher",
+      "name": "Bitcoin Crusher",
+      "category": "Media & Entertainment",
+      "description": "Customizable Bitcoin Crusher-inspired card/game concept. Repo adapter, original media and reel behavior must be verified; no wagering or StarCoin payouts.",
+      "sourceRepo": "www-infinity4/Bitcoin-Crusher",
+      "sourcePath": "",
+      "readiness": "candidate",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Game title",
+          "type": "text",
+          "default": "My Crusher"
+        },
+        {
+          "key": "song",
+          "label": "Authorized song URL",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "reels",
+          "label": "Own reel assets",
+          "type": "textarea",
+          "default": ""
+        }
+      ],
+      "keywords": [
+        "bitcoin crusher",
+        "reels",
+        "slot machine",
+        "arcade",
+        "game",
+        "music"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
+    }
+  ]
+}

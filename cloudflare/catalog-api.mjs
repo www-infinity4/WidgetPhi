@@ -5,6 +5,7 @@
  */
 import catalog from '../catalog/cards.json';
 import {mediaPrivate,mediaPublic} from './media-star-api.mjs';
+import {privateShop,publicShop} from './shop-phi-api.mjs';
 import {listLibrary,getLibraryCard,bindLineage} from './card-library-api.mjs';
 
 const cardById = new Map(catalog.cards.map(c => [c.id, c]));
@@ -186,6 +187,10 @@ async function route(request, env, url, owner) {
   if (!cardMatch) fail(404, 'Unknown endpoint');
   const instanceId = cardMatch[1], cardAction = cardMatch[2] || '';
   const card = await ownCard(db, siteId, instanceId);
+  if (cardAction.startsWith('shop/')) {
+    try{return await privateShop({request,db,owner,site,card,action:cardAction})}
+    catch(e){fail(e.status||500,e.message||'shop_phi_api_failure')}
+  }
   if (cardAction.startsWith('media/')) {
     try{return await mediaPrivate({request,db,owner,site,card,action:cardAction})}
     catch(e){fail(e.status||500,e.message||'media_api_failure')}
@@ -229,6 +234,11 @@ async function publicContent(request, env, url) {
   }
   const templateUrl=url.pathname.match(/^\/public\/cards\/([a-z][a-z0-9-]+)$/);
   if(templateUrl)return getLibraryCard(env.CATALOG_DB,templateUrl[1]);
+  const shopMatch=url.pathname.match(/^\/public\/sites\/([^/]+)\/cards\/([^/]+)\/shop$/);
+  if(shopMatch){
+    try{return await publicShop(env.CATALOG_DB,shopMatch[1],shopMatch[2])}
+    catch(e){fail(e.status||500,e.message||'shop_phi_api_failure')}
+  }
   const mediaMatch=url.pathname.match(/^\/public\/sites\/([^/]+)\/cards\/([^/]+)\/media$/);
   if(mediaMatch){
     try{return await mediaPublic(env.CATALOG_DB,mediaMatch[1],mediaMatch[2])}

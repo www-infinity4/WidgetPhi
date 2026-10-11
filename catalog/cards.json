@@ -415,6 +415,28 @@
           "default": "NASDAQ:GOOGL,NASDAQ:MSFT"
         }
       ]
+    },
+    {
+      "id": "card-builder-desk",
+      "name": "Card Builder Desk",
+      "category": "Search & Research",
+      "source": "WidgetPhi user request",
+      "readiness": "template",
+      "summary": "A reusable card inside any Phi site for designing and requesting new reusable WidgetPhi cards; let owner name the card, describe its behavior, choose existing enhancements or new builds, and send authenticated, source-linked build requests to the WidgetPhi rob",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Card Builder Desk"
+        },
+        {
+          "key": "index",
+          "label": "Owner content and topic index",
+          "type": "textarea",
+          "default": ""
+        }
+      ]
     }
   ]
 }

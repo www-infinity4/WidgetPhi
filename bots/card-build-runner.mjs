@@ -3,6 +3,7 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {requestFromIssue,build,preview} from './card-build-engine.mjs';
+import {askGemini} from './gemini-card-planner.mjs';
 const REPO='www-infinity4/WidgetPhi';
 const API='https://api.github.com/repos/'+REPO;
 const token=process.env.GITHUB_TOKEN||'';
@@ -32,7 +33,12 @@ async function processJob(issue){
  const prs=await gh('/pulls?state=all&per_page=100')||[];
  const prior=prs.find(x=>x.body?.includes(marker));
  if(prior)return{status:'existing_pr',url:prior.html_url};
- const result=build(request);
+ let result=build(request);
+ let model={status:'not_needed'};
+ if(result.status==='needs_adapter'){
+  model=await askGemini(request,{key:process.env.GEMINI_API_KEY||''});
+  if(model.status==='proposed')result=build(request,model.widget);
+ }
  if(result.status!=='built'){
   await feedback(issue,'The card bot checked real reusable adapters: '+result.reason+
    '\nNo working card was created until this missing input or adapter is addressed.',
@@ -47,7 +53,7 @@ async function processJob(issue){
   const receipt={schema:'widgetphi.functional-build/v1',issueNumber:issue.number,request:request.title,
    widget:result.widget,stockSymbols:request.symbols,sourceUrls:request.urls,
    actualAdapter:'src/widgets/'+result.widget+'.js',status:'tested_native_component',
-   creator:'www-infinity4',walletCharged:false,deployed:false,authorReview:'pending'};
+   creator:'www-infinity4',modelPlanning:model.status,walletCharged:false,deployed:false,authorReview:'pending'};
   await writeFile('catalog/generated/'+id+'.html',preview(result));
   await writeFile('catalog/jobs/'+id+'-functional.json',JSON.stringify(receipt,null,2)+'\n');
   execFileSync('npm',['test'],{stdio:'inherit',env:{...process.env,GITHUB_TOKEN:'',GEMINI_API_KEY:''}});

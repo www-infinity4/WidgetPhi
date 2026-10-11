@@ -36,7 +36,7 @@ function parseJwtJson(part) {
 }
 async function authenticatedSub(request, env) {
   const bearer = request.headers.get('authorization') || '';
-  if (!bearer.startsWith('Bearer ') || !env.CATALOG_JWT_SECRET) fail(401, 'Verified Phi session required');
+  if (!bearer.startsWith('Bearer ') || !env.CATALOG_JWT_SECRET || !env.CATALOG_JWT_ISSUER || !env.CATALOG_JWT_AUDIENCE) fail(401, 'Verified Phi session required');
   const token = bearer.slice(7);
   if (token.length > 4096) fail(401, 'Invalid session');
   const parts = token.split('.');
@@ -182,6 +182,24 @@ async function route(request, env, url, owner) {
 }
 async function publicContent(request, env, url) {
   if (!env.CATALOG_DB) fail(503, 'Catalog database not configured');
+  const search = url.pathname.match(/^\/public\/sites\/([^/]+)\/search$/);
+  if (search) {
+    const siteId = search[1];
+    if (!validId(siteId)) fail(404, 'Site not found');
+    const q = limitedString(url.searchParams.get('q') || '', 'search query', 120, true);
+    if (q.length < 2) fail(400, 'Search needs at least two characters');
+    const data = await env.CATALOG_DB.prepare(`SELECT i.content_id,i.instance_id,i.title,i.summary,i.body,i.source_url,i.index_json
+      FROM card_content i JOIN site_cards c ON i.site_id=c.site_id AND i.instance_id=c.instance_id
+      JOIN sites s ON s.site_id=c.site_id
+      WHERE i.site_id=? AND i.visibility='public' AND s.is_published=1 AND c.public_enabled=1
+      AND COALESCE(json_extract(c.settings_json,'$.access'),'free')='free'
+      AND instr(lower(i.title || ' ' || i.summary || ' ' || i.index_json), lower(?)) > 0
+      ORDER BY i.created_at DESC LIMIT 30`).bind(siteId, q).all();
+    return response({ query: q, items: (data.results || []).map(r => ({
+      id: r.content_id, instanceId: r.instance_id, title: r.title, summary: r.summary, body: r.body,
+      sourceUrl: r.source_url, indexTerms: JSON.parse(r.index_json)
+    })) }, 200, { 'cache-control': 'public, max-age=30' });
+  }
   const match = url.pathname.match(/^\/public\/sites\/([^/]+)\/cards\/([^/]+)\/content$/);
   if (!match || !validId(match[1]) || !validId(match[2])) fail(404, 'Not found');
   const [siteId, instanceId] = match.slice(1);

@@ -25,4 +25,5 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
-      - run: node --check cloudflare/catalog-api.mjs\n      - run: node --check catalog/embed.js
+      - run: node --check cloudflare/catalog-api.mjs
+      - run: node --check catalog/embed.js

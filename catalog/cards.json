@@ -1,0 +1,420 @@
+{
+  "schemaVersion": 1,
+  "platform": "WidgetPhi",
+  "categories": [
+    "Search & Research",
+    "Reading & Stories",
+    "Media & Entertainment",
+    "Markets & Utilities"
+  ],
+  "cards": [
+    {
+      "id": "search-engine",
+      "name": "Search Engine",
+      "category": "Search & Research",
+      "source": "QuantaPhi / InfinityPhi / OmniPhi",
+      "readiness": "integration",
+      "summary": "Search-first, image-first, AI-overview-first or links-only with research saved into your own website.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Search My Site"
+        },
+        {
+          "key": "mode",
+          "label": "Default search mode",
+          "type": "select",
+          "options": [
+            "ai-overview",
+            "images-first",
+            "links-only",
+            "quanta-style"
+          ],
+          "default": "quanta-style"
+        },
+        {
+          "key": "siteIndex",
+          "label": "Your site research keywords (comma-separated)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "captureResearch",
+          "label": "Attach approved research to this site",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "key": "showViewer",
+          "label": "Include Research Viewer card",
+          "type": "boolean",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "research-viewer",
+      "name": "Research Viewer",
+      "category": "Search & Research",
+      "source": "QuantaPhi viewer",
+      "readiness": "integration",
+      "summary": "Open supported research inside the website, record clicks with permission, and keep source links when a provider blocks framing.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Research Viewer"
+        },
+        {
+          "key": "mode",
+          "label": "Viewing mode",
+          "type": "select",
+          "options": [
+            "in-site-content",
+            "source-link"
+          ],
+          "default": "in-site-content"
+        },
+        {
+          "key": "trackClicks",
+          "label": "Record site-approved interactions",
+          "type": "boolean",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "scholastic-reader",
+      "name": "Scholastic Reader",
+      "category": "Reading & Stories",
+      "source": "Phi reading tools",
+      "readiness": "template",
+      "summary": "A customizable learning and educational reading shelf with your own lessons and sources.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "My Learning Reader"
+        },
+        {
+          "key": "audience",
+          "label": "Audience",
+          "type": "select",
+          "options": [
+            "all-ages",
+            "elementary",
+            "teen",
+            "adult"
+          ],
+          "default": "all-ages"
+        },
+        {
+          "key": "index",
+          "label": "Learning topics (comma-separated)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        }
+      ]
+    },
+    {
+      "id": "asteroid-reads",
+      "name": "Asteroid Reads",
+      "category": "Reading & Stories",
+      "source": "QuantaPhi science topics",
+      "readiness": "template",
+      "summary": "Build an astronomy/asteroid reader around verified research and user-selected space topics.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Asteroid Reads"
+        },
+        {
+          "key": "index",
+          "label": "Space research index (comma-separated)",
+          "type": "text",
+          "default": "asteroids,meteorites,solar system"
+        },
+        {
+          "key": "sourceRule",
+          "label": "Source rule",
+          "type": "select",
+          "options": [
+            "cited-sources-only",
+            "owner-approved-sources"
+          ],
+          "default": "cited-sources-only"
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        }
+      ]
+    },
+    {
+      "id": "infinite-stories",
+      "name": "Reads & Realms — Infinite Stories",
+      "category": "Reading & Stories",
+      "source": "Reads & Realms / Infinite Story Writer",
+      "readiness": "template",
+      "summary": "Use your own index, genres and writing rules to build a distinct story world, rather than sharing the owner's story dataset.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Reader brand",
+          "type": "text",
+          "default": "My Infinite Reader"
+        },
+        {
+          "key": "index",
+          "label": "Your story ideas and index (comma-separated)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "genres",
+          "label": "Story categories (comma-separated)",
+          "type": "text",
+          "default": "mystery,adventure"
+        },
+        {
+          "key": "writerGuidance",
+          "label": "Original writing guidance",
+          "type": "textarea",
+          "default": "Create original stories grounded in the owner's selected themes. Cite factual claims."
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        },
+        {
+          "key": "priceStarCoins",
+          "label": "Proposed StarCoins per unlock",
+          "type": "number",
+          "min": 0,
+          "max": 100,
+          "default": 0
+        }
+      ]
+    },
+    {
+      "id": "story-writer",
+      "name": "Story Writer",
+      "category": "Reading & Stories",
+      "source": "QuantaPhi story writer",
+      "readiness": "integration",
+      "summary": "Turn an uploaded or approved image, topic, or site index into a user-owned original story draft.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Story Writer"
+        },
+        {
+          "key": "index",
+          "label": "Themes and source index",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "allowImageInput",
+          "label": "Allow user-supplied image",
+          "type": "boolean",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "infinity-radio",
+      "name": "Infinity Radio",
+      "category": "Media & Entertainment",
+      "source": "Infinity Radio",
+      "readiness": "integration",
+      "summary": "An embeddable curated audio station with authorized source recordings and site-specific programming.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Station name",
+          "type": "text",
+          "default": "My Radio"
+        },
+        {
+          "key": "index",
+          "label": "Artists, genres and authorized feed index",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "autoplay",
+          "label": "Autoplay",
+          "type": "boolean",
+          "default": false
+        }
+      ]
+    },
+    {
+      "id": "media-star",
+      "name": "Media Star",
+      "category": "Media & Entertainment",
+      "source": "Media Star",
+      "readiness": "template",
+      "summary": "A shareable media episode catalog with verified links, shuffle, and independent playback history.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Show brand",
+          "type": "text",
+          "default": "My Media Star"
+        },
+        {
+          "key": "index",
+          "label": "Approved hosts and episode URLs",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "shuffle",
+          "label": "Shuffle without repeats",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        }
+      ]
+    },
+    {
+      "id": "podcast-card",
+      "name": "Podcast / Spaces",
+      "category": "Media & Entertainment",
+      "source": "WidgetPhi",
+      "readiness": "existing",
+      "summary": "Existing episode card shell with attribution, verified source links and wallet settlement gates.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Show name",
+          "type": "text",
+          "default": "My Podcast"
+        },
+        {
+          "key": "index",
+          "label": "Authorized episode URLs",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "access",
+          "label": "Reader access",
+          "type": "select",
+          "options": [
+            "free",
+            "paid"
+          ],
+          "default": "free"
+        }
+      ]
+    },
+    {
+      "id": "video-feed",
+      "name": "Video Feed",
+      "category": "Media & Entertainment",
+      "source": "WidgetPhi",
+      "readiness": "existing",
+      "summary": "Existing video widget scaffold, using verifiable licensed or supported provider URLs.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Feed name",
+          "type": "text",
+          "default": "My Videos"
+        },
+        {
+          "key": "index",
+          "label": "Approved video links",
+          "type": "textarea",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "id": "stock-card",
+      "name": "Stock Card",
+      "category": "Markets & Utilities",
+      "source": "WidgetPhi",
+      "readiness": "existing",
+      "summary": "Existing attributed stock display and Phi sharing/collecting shell.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "My Stock"
+        },
+        {
+          "key": "index",
+          "label": "Exchange and ticker",
+          "type": "text",
+          "default": "NASDAQ:GOOGL"
+        }
+      ]
+    },
+    {
+      "id": "market-ticker",
+      "name": "Market Ticker",
+      "category": "Markets & Utilities",
+      "source": "WidgetPhi",
+      "readiness": "existing",
+      "summary": "Existing reusable market ticker using attributed third-party embeds.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Ticker name",
+          "type": "text",
+          "default": "Market Watch"
+        },
+        {
+          "key": "index",
+          "label": "Symbols (comma-separated)",
+          "type": "text",
+          "default": "NASDAQ:GOOGL,NASDAQ:MSFT"
+        }
+      ]
+    }
+  ]
+}

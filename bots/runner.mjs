@@ -38,7 +38,7 @@ function issueFields(body){
   if(first<0)continue;
   const key=section.slice(0,first).trim().toLowerCase();
   const value=section.slice(first+1).trim();
-  result[key]=value===' _No response_'?'':value;
+  result[key]=value==='_No response_'?'':value;
  }
  return result;
 }

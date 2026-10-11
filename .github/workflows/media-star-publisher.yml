@@ -1,0 +1,29 @@
+name: WidgetPhi Cloudflare Media Star publisher
+on:
+  pull_request:
+    paths:
+      - 'cloudflare/catalog-api.mjs'
+      - 'cloudflare/media-star-api.mjs'
+      - 'workers/media-star-tenants/schema.sql'
+      - 'test/media-star-publisher.test.mjs'
+      - '.github/workflows/media-star-publisher.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cloudflare/catalog-api.mjs'
+      - 'cloudflare/media-star-api.mjs'
+      - 'test/media-star-publisher.test.mjs'
+permissions:
+  contents: read
+jobs:
+  creator-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check cloudflare/catalog-api.mjs
+          node --check cloudflare/media-star-api.mjs
+          node --test test/media-star-publisher.test.mjs

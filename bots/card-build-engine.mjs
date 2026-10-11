@@ -14,7 +14,7 @@ export function build(request,preferred=''){
  if(!request)return{status:'not_a_card_job'};
  const text=request.title+' '+request.body;
  const match=/\b(shop phi|curated store|curated ads|advertisement card|storefront)\b/i.test(text)?'shop-phi':
- const match=/\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':
+ /\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':
  /\b(media star|audio gallery|curated media)\b/i.test(text)?'media-star':
  /\b(youtube|video feed|video gallery)\b/i.test(text)?'video-feed':
  /\b(podcast|recorded spaces)\b/i.test(text)?'podcast-card':null;

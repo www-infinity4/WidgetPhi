@@ -1,0 +1,27 @@
+name: New Phi card
+description: Have WidgetPhi bots start a reusable card for the catalog instead of forking a page.
+title: "[Card New] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        WidgetPhi will propose the reusable card in a draft pull request. A new template is a starting point, not a fully implemented API, media service, or wallet integration.
+  - type: textarea
+    id: purpose
+    attributes:
+      label: What should this card do?
+      description: Describe the behavior and how someone would use it on their own website.
+      placeholder: "A visitor chooses a topic, reads stories with citations, and saves approved research to their own site."
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Search & Research
+        - Reading & Stories
+        - Media & Entertainment
+        - Markets & Utilities
+    validations:
+      required: true

@@ -70,6 +70,6 @@ export async function mediaPublic(db,siteId,cardId){
  const row=await db.prepare("SELECT m.price_starcoins AS price FROM media_cards m JOIN sites s ON s.site_id=m.site_id JOIN site_cards c ON c.site_id=m.site_id AND c.instance_id=m.card_id WHERE m.site_id=? AND m.card_id=? AND s.is_published=1 AND c.public_enabled=1 AND c.template_id='media-star'").bind(siteId,cardId).first();
  if(!row)fail(404,'not_published');
  const max=row.price>0?1:100;
- const items=await db.prepare("SELECT item_id,title,provider,media_kind,source_url,player_mode,playback_state FROM media_items WHERE site_id=? AND card_id=? AND visibility='published' ORDER BY updated_at DESC LIMIT ?").bind(siteId,cardId,max).all();
+ const items=await db.prepare("SELECT item_id,title,provider,media_kind,source_url,player_mode,playback_state FROM media_items WHERE site_id=? AND card_id=? AND visibility='published' ORDER BY item_id ASC LIMIT ?").bind(siteId,cardId,max).all();
  return respond({items:items.results||[],paidUnlocksEnabled:false,priceStarCoins:row.price,limitation:row.price>0?'Only the free preview is public; paid records need a signed entitlement':'Playback is controlled by the original provider'});
 }

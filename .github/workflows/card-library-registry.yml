@@ -1,0 +1,38 @@
+name: Wallet-owned WidgetPhi card library
+on:
+  pull_request:
+    paths:
+      - 'cloudflare/card-library-api.mjs'
+      - 'cloudflare/card-library-schema.sql'
+      - 'cloudflare/catalog-api.mjs'
+      - 'catalog/card-library-seed.json'
+      - 'src/card-library-discovery.mjs'
+      - 'bots/repo-card-census.mjs'
+      - 'skills/phi-card-registry-and-creator-rewards/**'
+      - '.github/workflows/card-library-registry.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'cloudflare/card-library-api.mjs'
+      - 'cloudflare/catalog-api.mjs'
+      - 'catalog/card-library-seed.json'
+      - 'src/card-library-discovery.mjs'
+permissions:
+  contents: read
+jobs:
+  check-card-library:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check source syntax and catalog completeness
+        run: |
+          node --check cloudflare/card-library-api.mjs
+          node --check cloudflare/catalog-api.mjs
+          node --check src/card-library-discovery.mjs
+          node --check bots/repo-card-census.mjs
+          node -e "const fs=require('node:fs');const p=JSON.parse(fs.readFileSync('catalog/card-library-seed.json'));if(p.items.length<13||!p.items.some(x=>x.id==='market-ticker'&&x.readiness==='existing'))process.exit(1)"
+      - name: Existing WidgetPhi regression suite
+        run: npm test

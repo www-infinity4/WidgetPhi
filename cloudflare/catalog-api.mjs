@@ -5,6 +5,7 @@
  */
 import catalog from '../catalog/cards.json';
 import {mediaPrivate,mediaPublic} from './media-star-api.mjs';
+import {listLibrary,getLibraryCard,bindLineage} from './card-library-api.mjs';
 
 const cardById = new Map(catalog.cards.map(c => [c.id, c]));
 const idPattern = /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$/;
@@ -128,9 +129,38 @@ async function route(request, env, url, owner) {
     return response({ site: { siteId, title: site.title, published: !!site.is_published },
       cards: (records.results || []).map(r => ({ instanceId: r.instance_id, cardId: r.template_id, settings: JSON.parse(r.settings_json), published: !!r.public_enabled })) });
   }
+  if(action==='card-suggestions'&&method==='GET'){
+    const query=url.searchParams.get('q')||'';
+    return response(await listLibrary(db,{query,limit:12}));
+  }
   if (action === 'publish' && method === 'POST') {
     await db.prepare("UPDATE sites SET is_published=1,updated_at=datetime('now') WHERE site_id=? AND owner_sub=?").bind(siteId, owner).run();
     return response({ siteId, published: true });
+  }
+  if(action==='cards/fork'&&method==='POST'){
+    const input=await bodyJson(request);
+    const parentSite=limitedString(input.parentSiteId||'','parentSiteId',80,true);
+    const parentInstance=limitedString(input.parentInstanceId||'','parentInstanceId',80,true);
+    const targetId=limitedString(input.instanceId||'','instanceId',80,true);
+    if(!validId(parentSite)||!validId(parentInstance)||!validId(targetId))fail(400,'invalid_card_instance');
+    const parent=await db.prepare(`SELECT c.template_id,l.original_template_id
+      FROM site_cards c JOIN sites s ON s.site_id=c.site_id
+      JOIN phi_card_lineage l ON l.site_id=c.site_id AND l.instance_id=c.instance_id
+      WHERE c.site_id=? AND c.instance_id=? AND c.public_enabled=1 AND s.is_published=1`)
+      .bind(parentSite,parentInstance).first();
+    if(!parent)fail(404,'public_parent_card_not_found');
+    const template=cardById.get(parent.template_id);
+    if(!template)fail(400,'unregistered_parent_template');
+    const settings=validateSettings(parent.template_id,input.settings||{});
+    const exists=await db.prepare('SELECT instance_id FROM site_cards WHERE site_id=? AND instance_id=?').bind(siteId,targetId).first();
+    if(exists)fail(409,'choose_unused_card_instance');
+    await db.batch([
+      db.prepare("INSERT INTO site_cards(site_id,instance_id,template_id,settings_json) VALUES(?,?,?,?)").bind(siteId,targetId,parent.template_id,JSON.stringify(settings)),
+      db.prepare("INSERT INTO phi_card_lineage(site_id,instance_id,template_id,original_template_id,derivative_parent_site_id,derivative_parent_instance_id,direct_creator_sub,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(siteId,targetId,parent.template_id,parent.original_template_id,parentSite,parentInstance,owner,Date.now())
+    ]);
+    return response({siteId,instanceId:targetId,cardId:parent.template_id,sourceTemplate:parent.original_template_id,
+      parent:{siteId:parentSite,instanceId:parentInstance},settings,published:false,
+      creatorIdentity:'authenticated_site_owner',royalties:'unsettled'},201);
   }
   if (action === 'cards' && method === 'POST') {
     const data = await bodyJson(request);
@@ -139,11 +169,18 @@ async function route(request, env, url, owner) {
     const count = await db.prepare('SELECT COUNT(*) AS n FROM site_cards WHERE site_id=?').bind(siteId).first();
     const already = await db.prepare('SELECT 1 AS found FROM site_cards WHERE site_id=? AND instance_id=?').bind(siteId, data.instanceId).first();
     if (!already && count.n >= 80) fail(409, 'Site card limit reached');
+    if(already){
+      const prior=await db.prepare('SELECT template_id FROM site_cards WHERE site_id=? AND instance_id=?').bind(siteId,data.instanceId).first();
+      if(prior?.template_id!==data.cardId)fail(409,'Use a new card instance to replace a template; preserve the original creator chain');
+    }
+    const registered=await db.prepare('SELECT template_id FROM phi_card_templates WHERE template_id=? AND active=1').bind(data.cardId).first();
+    if(!registered)fail(400,'Card is not registered for re-use');
     await db.prepare(`INSERT INTO site_cards(site_id,instance_id,template_id,settings_json) VALUES(?,?,?,?)
       ON CONFLICT(site_id,instance_id) DO UPDATE SET template_id=excluded.template_id,
       settings_json=excluded.settings_json,public_enabled=0,updated_at=datetime('now')`)
       .bind(siteId, data.instanceId, data.cardId, JSON.stringify(settings)).run();
-    return response({ siteId, instanceId: data.instanceId, cardId: data.cardId, published: false }, already ? 200 : 201);
+    await bindLineage(db,{siteId,instanceId:data.instanceId,templateId:data.cardId,ownerSub:owner});
+    return response({ siteId, instanceId: data.instanceId, cardId: data.cardId, published: false, creatorAttribution:'recorded',royaltyCredits:0 }, already ? 200 : 201);
   }
   const cardMatch = action.match(/^cards\/([^/]+)(?:\/(.*))?$/);
   if (!cardMatch) fail(404, 'Unknown endpoint');
@@ -187,6 +224,11 @@ async function route(request, env, url, owner) {
 }
 async function publicContent(request, env, url) {
   if (!env.CATALOG_DB) fail(503, 'Catalog database not configured');
+  if(url.pathname==='/public/cards'&&request.method==='GET'){
+    return response(await listLibrary(env.CATALOG_DB,{query:url.searchParams.get('q')||'',limit:Math.min(40,Math.max(1,Number(url.searchParams.get('limit'))||12))}));
+  }
+  const templateUrl=url.pathname.match(/^\/public\/cards\/([a-z][a-z0-9-]+)$/);
+  if(templateUrl)return getLibraryCard(env.CATALOG_DB,templateUrl[1]);
   const mediaMatch=url.pathname.match(/^\/public\/sites\/([^/]+)\/cards\/([^/]+)\/media$/);
   if(mediaMatch){
     try{return await mediaPublic(env.CATALOG_DB,mediaMatch[1],mediaMatch[2])}

@@ -76,7 +76,7 @@ test('sponsored items must disclose sponsor and cannot publish unsafe links',asy
 test('Shop Phi profile cannot steal a configured creator wallet when card display is renamed',async()=>{
  const {owned,sqlite}=fixture();
  await owned('one','owner-creator-one','shop/config');
- await owned('one','owner-creator-attacker','shop/config');
+ await assert.rejects(owned('one','owner-creator-attacker','shop/config'),e=>e.status===403);
  const profile=sqlite.prepare("SELECT creator_sub FROM shop_phi_profiles WHERE site_id='one'").get();
  assert.equal(profile.creator_sub,'owner-creator-one');
  await assert.rejects(owned('one','owner-creator-attacker','shop/items',{itemId:'attack',title:'Fake advert',url:'https://example.org/ad'}),e=>e.status===409);

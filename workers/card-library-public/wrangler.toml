@@ -1,0 +1,8 @@
+name = "widgetphi-card-library"
+main = "worker.mjs"
+compatibility_date = "2026-10-11"
+
+[[d1_databases]]
+binding = "CATALOG_DB"
+database_name = "widgetphi-catalog"
+database_id = "cca7d66c-1bc7-409d-baa7-c88e38493918"

@@ -1,0 +1,34 @@
+name: WidgetPhi Shop Phi curation and source receipts
+on:
+  pull_request:
+    paths:
+      - 'src/widgets/shop-phi.js'
+      - 'src/index.js'
+      - 'catalog/cards.json'
+      - 'catalog/card-library-seed.json'
+      - 'cloudflare/shop-phi-api.mjs'
+      - 'cloudflare/shop-phi-schema.sql'
+      - 'cloudflare/catalog-api.mjs'
+      - 'test/shop-phi*'
+      - '.github/workflows/shop-phi.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/widgets/shop-phi.js'
+      - 'cloudflare/shop-phi-api.mjs'
+      - 'cloudflare/shop-phi-schema.sql'
+permissions:
+  contents: read
+jobs:
+  safe-commerce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: |
+          node --check src/widgets/shop-phi.js
+          node --check cloudflare/shop-phi-api.mjs
+          node --check cloudflare/catalog-api.mjs
+          npm test

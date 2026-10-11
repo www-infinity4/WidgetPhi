@@ -8,12 +8,13 @@ export function requestFromIssue(issue){
  const raw=body.match(/^\s*Symbols?\s*:\s*(.+)$/im)?.[1]||'';
  const symbols=[...new Set(raw.split(/[,\s]+/).map(s=>s.trim().toUpperCase()).filter(Boolean))].slice(0,15);
  const urls=[...new Set((body.match(/https:\/\/[^\s<>"']+/g)||[]).map(x=>x.replace(/[),.;]+$/,'')))].slice(0,40);
- return {number:issue.number,title,body,symbols,urls,author:issue.user?.login||''};
+ return {number:issue.number,title,body,intent:issue.title||'',symbols,urls,author:issue.user?.login||''};
 }
 export function build(request,preferred=''){
  if(!request)return{status:'not_a_card_job'};
- const text=request.title+' '+request.body;
- const match=/\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':
+ const text=request.title+' '+request.body+' '+(request.intent||'');
+ const match=/\b(shop phi|curated store|curated ads|advertisement card|storefront)\b/i.test(text)?'shop-phi':
+ /\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':
  /\b(media star|audio gallery|curated media)\b/i.test(text)?'media-star':
  /\b(youtube|video feed|video gallery)\b/i.test(text)?'video-feed':
  /\b(podcast|recorded spaces)\b/i.test(text)?'podcast-card':null;
@@ -25,6 +26,18 @@ export function build(request,preferred=''){
    return{status:'needs_source_data',reason:'Add explicit Symbols: NASDAQ:AAPL,NASDAQ:MSFT; the bot must not guess stocks'};
   if(widget==='market-ticker')spec.symbols=request.symbols;
   else{const p=request.symbols[0].split(':');spec.symbol=p.pop();spec.exchange=p[0]||'';spec.company=request.title}
+ }else if(widget==='shop-phi'){
+  const lines=request.body.split(/\r?\n/).map(x=>x.trim());
+  const items=[];
+  for(const line of lines){
+   const m=line.match(/^(Item|Ad):\s*(.+?)\s*\|\s*(https:\/\/[^\s|]+)(?:\s*\|\s*(.+))?$/i);
+   if(!m)continue;
+   if(m[1].toLowerCase()==='ad'&&!m[4])return{status:'needs_source_data',reason:'Sponsored Ad lines must specify sponsor after a second |'};
+   items.push({title:m[2],url:m[3],kind:m[1].toLowerCase()==='ad'?'advertisement':'product',sponsored:m[1].toLowerCase()==='ad',sponsor:m[4]||''});
+  }
+  if(!items.length)return{status:'needs_source_data',reason:'Add Item: Product title | https://merchant.example/item or Ad: Title | https://source | Sponsor'};
+  spec.items=items;spec.priceStarCoins=1;
+  spec.creatorBrand=request.body.match(/^Curator:\s*(.+)$/im)?.[1]||'My Picks';
  }else if(widget==='media-star'){
   if(!request.urls.length)return{status:'needs_source_data',reason:'Add original media URLs before generating the player'};
   spec.query=request.title;spec.priceStarCoins=0;spec.sources=request.urls.map((url,i)=>({url,title:'Sourced item '+(i+1)}));

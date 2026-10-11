@@ -21,6 +21,8 @@ export async function privateShop({request,db,owner,site,card,action}){
   const topic=clean(settings.query||'',140);
   const selection=String(settings.selectionMode||'no-repeat-shuffle');
   if(!['no-repeat-shuffle','owner-sequence'].includes(selection))error(400,'invalid_selection_mode');
+  const existing=await db.prepare('SELECT creator_sub FROM shop_phi_profiles WHERE site_id=? AND instance_id=?').bind(siteId,instanceId).first();
+  if(existing&&existing.creator_sub!==owner)error(403,'creator_identity_mismatch');
   await db.prepare("INSERT INTO shop_phi_profiles(site_id,instance_id,creator_sub,display_name,creator_brand,topic,price_starcoins,selection_mode,updated_at) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(site_id,instance_id) DO UPDATE SET display_name=excluded.display_name,creator_brand=excluded.creator_brand,topic=excluded.topic,price_starcoins=excluded.price_starcoins,selection_mode=excluded.selection_mode,updated_at=excluded.updated_at")
    .bind(siteId,instanceId,owner,title,creatorBrand,topic,price,selection,now).run();
   return out({ok:true,siteId,instanceId,title,creatorBrand,proposedPriceStarCoins:price,

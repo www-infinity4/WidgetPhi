@@ -17,7 +17,7 @@ on:
         required: false
         type: string
   schedule:
-    - cron: '12 * * * *'
+    - cron: '*/15 * * * *'
   pull_request:
     paths:
       - 'bots/card-build-engine.mjs'

@@ -1,0 +1,14 @@
+{
+  "schema": "widgetphi.card-build-queue/v1",
+  "issueNumber": 22,
+  "title": "Working stock ticker demo",
+  "requestSource": "https://github.com/www-infinity4/WidgetPhi/issues/22",
+  "expectedAdapter": "market-ticker",
+  "stockSymbols": [
+    "NASDAQ:AAPL",
+    "NASDAQ:MSFT"
+  ],
+  "status": "queued_for_verified_bot",
+  "payments": false,
+  "source": "owner-approved GitHub issue"
+}

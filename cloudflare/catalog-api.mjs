@@ -137,6 +137,31 @@ async function route(request, env, url, owner) {
     await db.prepare("UPDATE sites SET is_published=1,updated_at=datetime('now') WHERE site_id=? AND owner_sub=?").bind(siteId, owner).run();
     return response({ siteId, published: true });
   }
+  if(action==='cards/fork'&&method==='POST'){
+    const input=await bodyJson(request);
+    const parentSite=limitedString(input.parentSiteId||'','parentSiteId',80,true);
+    const parentInstance=limitedString(input.parentInstanceId||'','parentInstanceId',80,true);
+    const targetId=limitedString(input.instanceId||'','instanceId',80,true);
+    if(!validId(parentSite)||!validId(parentInstance)||!validId(targetId))fail(400,'invalid_card_instance');
+    const parent=await db.prepare(`SELECT c.template_id,l.original_template_id
+      FROM site_cards c JOIN sites s ON s.site_id=c.site_id
+      JOIN phi_card_lineage l ON l.site_id=c.site_id AND l.instance_id=c.instance_id
+      WHERE c.site_id=? AND c.instance_id=? AND c.public_enabled=1 AND s.is_published=1`)
+      .bind(parentSite,parentInstance).first();
+    if(!parent)fail(404,'public_parent_card_not_found');
+    const template=cardById.get(parent.template_id);
+    if(!template)fail(400,'unregistered_parent_template');
+    const settings=validateSettings(parent.template_id,input.settings||{});
+    const exists=await db.prepare('SELECT instance_id FROM site_cards WHERE site_id=? AND instance_id=?').bind(siteId,targetId).first();
+    if(exists)fail(409,'choose_unused_card_instance');
+    await db.batch([
+      db.prepare("INSERT INTO site_cards(site_id,instance_id,template_id,settings_json) VALUES(?,?,?,?)").bind(siteId,targetId,parent.template_id,JSON.stringify(settings)),
+      db.prepare("INSERT INTO phi_card_lineage(site_id,instance_id,template_id,original_template_id,derivative_parent_site_id,derivative_parent_instance_id,direct_creator_sub,created_at) VALUES(?,?,?,?,?,?,?,?)").bind(siteId,targetId,parent.template_id,parent.original_template_id,parentSite,parentInstance,owner,Date.now())
+    ]);
+    return response({siteId,instanceId:targetId,cardId:parent.template_id,sourceTemplate:parent.original_template_id,
+      parent:{siteId:parentSite,instanceId:parentInstance},settings,published:false,
+      creatorIdentity:'authenticated_site_owner',royalties:'unsettled'},201);
+  }
   if (action === 'cards' && method === 'POST') {
     const data = await bodyJson(request);
     if (!validId(data.instanceId)) fail(400, 'Invalid instanceId');

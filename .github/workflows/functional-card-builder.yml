@@ -1,0 +1,48 @@
+name: WidgetPhi Functional Card Builder
+on:
+  issues:
+    types: [opened, edited, reopened]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Existing owner [Card Build] GitHub issue number'
+        required: false
+        type: string
+  schedule:
+    - cron: '12 * * * *'
+  pull_request:
+    paths:
+      - 'bots/card-build-engine.mjs'
+      - 'bots/card-build-runner.mjs'
+      - 'test/card-build-runner.test.mjs'
+      - '.github/workflows/functional-card-builder.yml'
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency:
+  group: widgetphi-functional-build
+  cancel-in-progress: false
+jobs:
+  functional-builder:
+    if: github.event_name != 'issues' || startsWith(github.event.issue.title, '[Card Build]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check bot execution logic
+        run: |
+          node --check bots/card-build-engine.mjs
+          node --check bots/card-build-runner.mjs
+          npm test
+      - name: Build existing working widgets into reviewable PRs
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node bots/card-build-runner.mjs

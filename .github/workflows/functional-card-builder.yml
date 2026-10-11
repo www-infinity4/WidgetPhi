@@ -14,6 +14,7 @@ on:
     paths:
       - 'bots/card-build-engine.mjs'
       - 'bots/card-build-runner.mjs'
+      - 'bots/gemini-card-planner.mjs'
       - 'test/card-build-runner.test.mjs'
       - '.github/workflows/functional-card-builder.yml'
 permissions:
@@ -40,9 +41,11 @@ jobs:
         run: |
           node --check bots/card-build-engine.mjs
           node --check bots/card-build-runner.mjs
+          node --check bots/gemini-card-planner.mjs
           npm test
       - name: Build existing working widgets into reviewable PRs
         if: github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node bots/card-build-runner.mjs

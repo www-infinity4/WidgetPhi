@@ -1,0 +1,31 @@
+{
+  "schema": "widgetphi.card-build-job",
+  "version": 1,
+  "jobId": "issue-8",
+  "request": {
+    "schema": "widgetphi.card-request",
+    "version": 1,
+    "kind": "new",
+    "name": "Card Builder Desk",
+    "cardId": "card-builder-desk",
+    "category": "Search & Research",
+    "description": "A reusable card inside any Phi site for designing and requesting new reusable WidgetPhi cards; let owner name the card, describe its behavior, choose existing enhancements or new builds, and send authenticated, source-linked build requests to the WidgetPhi robot workshop without requiring the customer to use GitHub. Ensure the public interface never gets repository tokens.",
+    "setting": null,
+    "issueNumber": 8,
+    "source": null,
+    "requestedBy": "www-infinity4"
+  },
+  "state": "requires-build-review",
+  "codeGenerated": false,
+  "tested": false,
+  "deployed": false,
+  "paid": false,
+  "handoff": {
+    "blue": "Validate source, tenant data and reusable setting schema",
+    "green": "Implement and integrate card logic in WidgetPhi before publishing",
+    "pink": "Test accessibility, callbacks and regressions",
+    "purple": "Approve documented evidence and release"
+  },
+  "outcome": "new-template",
+  "buildRequestEvidence": "Request was validated; template changes are not production code."
+}

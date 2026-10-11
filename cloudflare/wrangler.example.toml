@@ -1,0 +1,17 @@
+# Example only: copy to a private deployment config and fill your own database binding.
+name = "widgetphi-card-catalog"
+main = "catalog-api.mjs"
+compatibility_date = "2026-10-11"
+
+[vars]
+CATALOG_JWT_ISSUER = "phi-wallet"
+CATALOG_JWT_AUDIENCE = "widgetphi-catalog"
+ALLOWED_ORIGINS = "https://quantaphi.org"
+
+[[d1_databases]]
+binding = "CATALOG_DB"
+database_name = "widgetphi-catalog"
+database_id = "REPLACE_WITH_ACTUAL_D1_DATABASE_ID"
+
+# CATALOG_JWT_SECRET must be set using a secret, never here.
+# This example is not production deployment configuration.

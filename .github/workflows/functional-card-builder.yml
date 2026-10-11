@@ -1,5 +1,13 @@
 name: WidgetPhi Functional Card Builder
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'bots/card-build-engine.mjs'
+      - 'bots/card-build-runner.mjs'
+      - 'bots/gemini-card-planner.mjs'
+      - '.github/workflows/functional-card-builder.yml'
+      - 'catalog/requests/**'
   issues:
     types: [opened, edited, reopened]
   workflow_dispatch:

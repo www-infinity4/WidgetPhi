@@ -8,7 +8,7 @@
 - `catalog/cards.json`: canonical template definitions and default settings for Search Engine, Research Viewer, Scholastic Reader, Asteroid Reads, Reads & Realms Infinite Stories, Story Writer, Infinity Radio, Media Star, podcast/video, and market widgets.
 - `src/catalog.js`: server-side manifest validation for custom card instances. Existing `src/index.js` and existing WidgetPhi cards remain untouched.
 - `cloudflare/catalog-schema.sql`: shared D1 tenant/site/card/content tables.
-- `cloudflare/catalog-api.mjs`: authenticated API for site creation, per-card configuration, publishing, and custom content. Public reads are free/published content only.
+- `cloudflare/catalog-api.mjs`: authenticated API for site creation, per-card configuration, publishing, and custom content. Public reads/search are free/published content only.\n- `catalog/embed.js`: website-side renderer for published reader entries, on-site keyword search and a separate Research Viewer; no outside site is framed.
 
 ## Customer flow
 
@@ -64,7 +64,7 @@ POST /api/sites/:siteId/cards               (verified session; upsert instance)
 POST /api/sites/:siteId/cards/:instance/publish
 POST /api/sites/:siteId/cards/:instance/content (own story/research entries)
 POST /api/sites/:siteId/publish
-GET  /public/sites/:siteId/cards/:instance/content  (published free entries only)
+GET  /public/sites/:siteId/cards/:instance/content  (published free entries only)\nGET  /public/sites/:siteId/search?q=...              (published free site-wide search)
 ```
 
 Example configuration, with no tenant ID supplied by browser:

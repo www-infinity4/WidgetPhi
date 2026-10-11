@@ -1,0 +1,48 @@
+name: Phi media health robot
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'bots/media-star-live-watch.mjs'
+      - 'test/media-star-live-watch.test.mjs'
+      - '.github/workflows/media-star-live-watch.yml'
+permissions:
+  contents: read
+  actions: read
+  issues: write
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Prove observer cannot create fake outages
+        run: node --test test/media-star-live-watch.test.mjs
+      - name: Check Phi media + StarQuest public health
+        env:
+          MEDIA_WATCH_OUTPUT: media-watch-output
+        run: node bots/media-star-live-watch.mjs
+      - name: Preserve the machine-readable repair receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: phi-media-repair-watch
+          path: media-watch-output/
+      - name: Queue one deduplicated repair issue on confirmed broken source
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HARD_COUNT=$(node -p "require('./media-watch-output/report.json').openJobs.filter(x=>x.priority==='repair').length")
+          if [ "$HARD_COUNT" -gt 0 ]; then
+            CURRENT=$(gh issue list --state open --search 'in:title "[Repair] Media Star source regression"' --json number --jq '.[0].number // ""')
+            if [ -z "$CURRENT" ]; then
+              gh issue create --title '[Repair] Media Star source regression' --body-file media-watch-output/report.md
+            else
+              echo "Existing repair job #$CURRENT; no duplicate issue."
+            fi
+          fi

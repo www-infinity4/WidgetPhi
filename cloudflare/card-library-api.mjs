@@ -34,7 +34,7 @@ export async function bindLineage(db,{siteId,instanceId,templateId,ownerSub,prio
  const site=await db.prepare('SELECT site_id FROM sites WHERE site_id=? AND owner_sub=?').bind(siteId,ownerSub).first();
  if(!site)throw Object.assign(Error('site_not_owned'),{status:403});
  await db.prepare('INSERT OR IGNORE INTO phi_card_lineage(site_id,instance_id,template_id,original_template_id,derivative_parent_site_id,derivative_parent_instance_id,direct_creator_sub,created_at) VALUES(?,?,?,?,?,?,?,?)')
- .bind(siteId,instanceId,templateId,templateId,priorCard?.siteId||null,priorCard?.instanceId||null,ownerSub,Date.now()).run();
+ .bind(siteId,instanceId,templateId,priorCard?.originalTemplateId||templateId,priorCard?.siteId||null,priorCard?.instanceId||null,ownerSub,Date.now()).run();
  return {ok:true,siteId,instanceId,templateId,originalTemplateId:templateId,
   ownerWalletAuthenticated:true,royalties:'not_settled'};
 }

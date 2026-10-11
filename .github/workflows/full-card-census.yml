@@ -1,0 +1,30 @@
+name: Phi full repository card census
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '29 6 * * *'
+  pull_request:
+    paths:
+      - 'bots/repo-card-census.mjs'
+      - '.github/workflows/full-card-census.yml'
+permissions:
+  contents: read
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify safe scanning code
+        run: node --check bots/repo-card-census.mjs
+      - name: Read visible Phi repository metadata
+        env:
+          CARD_CENSUS_OUTPUT: card-census-output
+        run: node bots/repo-card-census.mjs
+      - name: Save AI-reviewable public capability inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: widgetphi-card-census
+          path: card-census-output/census.json

@@ -81,7 +81,7 @@ async function hasExistingPR(id){
  const list=await gh('/repos/'+REPO+'/pulls?state=all&per_page=100');
  return (list||[]).find(x=>String(x.body||'').includes('<!-- widgetphi-job:'+id+' -->'))||null;
 }
-async function processRequest(raw,{issueNumber=null}={}){
+async function processRequest(raw,{issueNumber=null,ownerAuthorized=false}={}){
  const request=normalizeRequest(raw);
  const id=request.issueNumber?'issue-'+request.issueNumber:
   'source-'+request.source.sha.slice(0,12)+'-'+request.cardId;
@@ -105,6 +105,17 @@ async function processRequest(raw,{issueNumber=null}={}){
   git('-c','user.name=widgetphi-card-bot[bot]','-c',
    'user.email=41898282+github-actions[bot]@users.noreply.github.com',
    'commit','-m','WidgetPhi card build intake: '+id);
+  // The verified repository owner may publish safe, tested metadata directly.
+  // This NEVER completes an unfinished adapter or promotes wallet-related code.
+  if(ownerAuthorized){
+   git('push','origin','HEAD:refs/heads/main');
+   const sha=git('rev-parse','HEAD');
+   const commitUrl='https://github.com/'+REPO+'/commit/'+sha;
+   if(issueNumber)await openIssueComment(issueNumber,'WidgetPhi bot checked in the card starter/job: '+commitUrl+
+     '\nOutcome: '+result.reason+'. This is catalog metadata, not a finished integrated card.');
+   console.log('owner_catalog_metadata_published',commitUrl,result.reason);
+   return {id,commit:commitUrl,outcome:result.reason};
+  }
   git('push','origin','HEAD:refs/heads/'+branch);
   const body='<!-- widgetphi-job:'+id+' -->\n'+
    '## WidgetPhi automatic card workshop handoff\n'+
@@ -167,7 +178,7 @@ async function processQueuedOwnerIssues(){
   if(processed>=3)break;
   try{
    const raw=loadRequest(issue);if(!raw)continue;
-   const result=await processRequest(raw,{issueNumber:issue.number});
+   const result=await processRequest(raw,{issueNumber:issue.number,ownerAuthorized:issue.user?.login==='www-infinity4'});
    if(!result.existing)processed++;
   }catch(e){console.error('card_issue_blocked',issue.number,String(e.message));
    await openIssueComment(issue.number,'WidgetPhi cannot build this card yet: '+String(e.message).slice(0,200));}
@@ -187,15 +198,15 @@ async function main(){
   if(!['opened','edited','reopened'].includes(data.action)||!data.issue||data.repository?.full_name!==REPO)return;
   try{
    const raw=loadRequest(data.issue);
-   if(raw)await processRequest(raw,{issueNumber:data.issue.number});
+   if(raw)await processRequest(raw,{issueNumber:data.issue.number,ownerAuthorized:data.issue.user?.login==='www-infinity4'});
   }catch(e){await openIssueComment(data.issue.number,'WidgetPhi request blocked: '+String(e.message).slice(0,220));throw e}
   return;
  }
  if(EVENT==='repository_dispatch'){
   const event=JSON.parse(await readFile(EVPATH,'utf8'));
   if(event.action!=='widgetphi-card-request')return;
-  // Trust only signed GitHub repository_dispatch senders with a correct origin;
-  // catalog patch remains a draft PR requiring code review and testing.
+  // Authenticated dispatch remains review-only unless the verified owner submits an issue.
+  // Never trust requestedBy or other browser-supplied identity claims.
   const raw=normalizeRequest(event.client_payload);
   await processRequest(raw,{issueNumber:raw.issueNumber});
   return;
@@ -209,7 +220,7 @@ async function main(){
    const issue=await gh('/repos/'+REPO+'/issues/'+n);
    if(!issue)throw Error('Issue not found');
    const request=loadRequest(issue);if(!request)throw Error('This is not a WidgetPhi card request');
-   return processRequest(request,{issueNumber:n});
+   return processRequest(request,{issueNumber:n,ownerAuthorized:issue.user?.login==='www-infinity4'});
   }
   await scanSources();await processQueuedOwnerIssues();
  }

@@ -56,7 +56,7 @@ async function processJob(issue){
    creator:'www-infinity4',modelPlanning:model.status,walletCharged:false,deployed:false,authorReview:'pending'};
   await writeFile('catalog/generated/'+id+'.html',preview(result));
   await writeFile('catalog/jobs/'+id+'-functional.json',JSON.stringify(receipt,null,2)+'\n');
-  execFileSync('npm',['test'],{stdio:'inherit',env:{...process.env,GITHUB_TOKEN:'',GEMINI_API_KEY:''}});
+  execFileSync('npm',['test'],{stdio:'inherit',env:{...process.env,GITHUB_TOKEN:'',GHP:'',GH_TOKEN:'',PHI_BOT_TOKEN:'',GEMINI_API_KEY:''}});
   git('diff','--check');
   git('add','catalog/generated/'+id+'.html','catalog/jobs/'+id+'-functional.json');
   git('-c','user.name=widgetphi-functional-bot[bot]','-c',

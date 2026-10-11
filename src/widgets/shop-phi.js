@@ -46,7 +46,7 @@ function teaser(item){
  return'<article class="shopphi-feature" style="border:1px solid #e6d4a9;padding:14px;border-radius:16px;background:white;color:#212734">'+
  poster+label+'<h3>'+escape(item.title)+'</h3><p>'+escape(item.description)+'</p>'+
  (item.priceLabel?'<p><strong>Observed price:</strong> '+escape(item.priceLabel)+(item.observedAt?' · '+escape(item.observedAt):'')+'</p>':'')+
- '<p>Seller/source: '+escape(item.sourceLabel)+'</p><a href="'+escape(item.url)+'" target="_blank" rel="noopener noreferrer sponsored" style="display:inline-block;padding:10px 13px;background:#eac651;color:#231d10;border-radius:10px;font-weight:800">Open original shop or source ↗</a>'+
+ '<p>Seller/source: '+escape(item.sourceLabel)+'</p><a href="'+escape(item.url)+'" target="_blank" rel="'+(item.sponsored||item.affiliate?'noopener noreferrer sponsored':'noopener noreferrer')+'" style="display:inline-block;padding:10px 13px;background:#eac651;color:#231d10;border-radius:10px;font-weight:800">Open original shop or source ↗</a>'+
  (item.affiliate?'<small style="display:block">Affiliate link; the curator may earn a commission.</small>':'')+'</article>';
 }
 function build(spec={}){

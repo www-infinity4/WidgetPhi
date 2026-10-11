@@ -5,6 +5,7 @@ import catalog from '../catalog/cards.json' with {type:'json'};
 
 test('new request produces independently configurable template, not a site fork',()=>{
  const raw={kind:'new',name:'Cherry Tree Library',description:'Create owner-specific botanical story cards and reading sequences for a customer website.',issueNumber:45,category:'Reading & Stories'};
+ const originalCount=catalog.cards.length;
  const r=applyRequest(catalog,raw);
  assert.equal(r.changed,true);
  assert.equal(r.reason,'new-template');
@@ -13,7 +14,7 @@ test('new request produces independently configurable template, not a site fork'
  assert.equal(r.catalog.cards.at(-1).settings[1].key,'index');
  assert.equal(r.job.deployed,false);
  assert.equal(r.job.paid,false);
- assert.equal(catalog.cards.length,12);
+ assert.equal(catalog.cards.length,originalCount);
 });
 test('add known safe settings to an existing card, preserving original',()=>{
  const r=applyRequest(catalog,{kind:'enhance',name:'search-engine',cardId:'search-engine',

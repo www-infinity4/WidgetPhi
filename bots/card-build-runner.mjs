@@ -22,9 +22,10 @@ async function feedback(issue,reply,marker){
  if(comments.some(x=>x.body?.includes(marker)))return;
  await gh('/issues/'+issue.number+'/comments',{method:'POST',body:{body:marker+'\n'+reply}});
 }
-async function process(issue){
+async function processJob(issue){
  if(issue.user?.login!=='www-infinity4')return {status:'pending_creator_authorization'};
  const request=requestFromIssue(issue);if(!request)return{status:'not_job'};
+ if(!Number.isInteger(issue.number)||issue.number<=0)return{status:'invalid_issue'};
  const id='issue-'+issue.number,marker='<!-- widgetphi-functional-job:'+id+' -->';
  const complete=await gh('/contents/catalog/generated/'+id+'.html?ref=main');
  if(complete)return{status:'already_merged'};
@@ -83,7 +84,7 @@ async function main(){
   const rows=await gh('/issues?state=open&per_page=100')||[];
   issues=rows.filter(x=>!x.pull_request&&/^\[Card Build\]/i.test(x.title)).slice(0,4);
  }
- for(const issue of issues)try{console.log('card_job_result',JSON.stringify(await process(issue)))}
+ for(const issue of issues)try{console.log('card_job_result',JSON.stringify(await processJob(issue)))}
  catch(error){console.error('card_job_error',issue.number,String(error.message||error).slice(0,260));process.exitCode=1}
 }
 await main();

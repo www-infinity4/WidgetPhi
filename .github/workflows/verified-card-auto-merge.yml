@@ -6,7 +6,7 @@ on:
       - WidgetPhi Functional Card Builder
     types: [completed]
   schedule:
-    - cron: '32 * * * *'
+    - cron: '7,22,37,52 * * * *'
 permissions:
   contents: write
   pull-requests: write

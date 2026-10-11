@@ -14,6 +14,7 @@ register(require('./widgets/stock-wallet'));
 register(require('./widgets/podcast-card'));
 register(require('./widgets/video-feed'));
 register(require('./widgets/media-star'));
+register(require('./widgets/shop-phi'));
 
 register(require('./widgets/seasonal-card'));
 

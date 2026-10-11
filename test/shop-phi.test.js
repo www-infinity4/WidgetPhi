@@ -32,7 +32,7 @@ test('Shop Phi escapes titles and refuses unsafe, duplicate or unsupported sourc
  assert.equal(c.items.length,1);
  const html=shop.build({items:c.items});
  assert.doesNotMatch(html,/<img onerror=/);
- assert.match(html,/&lt;img/);
+ assert.match(html,/&#60;img/);
  assert.throws(()=>shop.normalize({priceStarCoins:-1}),/0–100 whole StarCoins/);
 });
 test('Shop Phi does not invent product prices or sponsorship',()=>{

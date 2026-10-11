@@ -1,0 +1,36 @@
+name: WidgetPhi Verified Bot Preview Merger
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - WidgetPhi Functional Card Builder
+    types: [completed]
+  schedule:
+    - cron: '32 * * * *'
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: widgetphi-safe-preview-merge
+  cancel-in-progress: false
+jobs:
+  safe-merge:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check safe merger and bot artifact rules
+        run: |
+          node --check bots/safe-preview-merge.mjs
+          node --test test/safe-preview-merge.test.mjs
+      - name: Merge only verified source-linked bot previews
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node bots/safe-preview-merge.mjs

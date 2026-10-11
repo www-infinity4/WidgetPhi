@@ -286,7 +286,7 @@
       "category": "Media & Entertainment",
       "source": "Media Star",
       "readiness": "template",
-      "summary": "A shareable media episode catalog with verified links, shuffle, and independent playback history.",
+      "summary": "A renamable, Avatar-style curated gallery/player for collected images, audio, video and episodes, with source-verified playback and owner-specific storage.",
       "settings": [
         {
           "key": "title",
@@ -315,6 +315,54 @@
             "paid"
           ],
           "default": "free"
+        },
+        {
+          "key": "priceStarCoins",
+          "label": "Proposed creator curation price (whole StarCoins)",
+          "type": "number",
+          "min": 0,
+          "max": 100,
+          "default": 1
+        },
+        {
+          "key": "mediaKind",
+          "label": "Media collection type",
+          "type": "select",
+          "options": [
+            "mixed",
+            "audio",
+            "video",
+            "art-gallery"
+          ],
+          "default": "mixed"
+        },
+        {
+          "key": "avatarLabel",
+          "label": "Avatar / host display",
+          "type": "text",
+          "default": "My Curator"
+        },
+        {
+          "key": "theme",
+          "label": "Card atmosphere",
+          "type": "select",
+          "options": [
+            "sun-gold",
+            "oracle-purple",
+            "gallery-white",
+            "deep-night"
+          ],
+          "default": "sun-gold"
+        },
+        {
+          "key": "sourceRule",
+          "label": "Playback strategy",
+          "type": "select",
+          "options": [
+            "official-player-first",
+            "original-link-first"
+          ],
+          "default": "official-player-first"
         }
       ]
     },

@@ -13,6 +13,8 @@ register(require('./widgets/market-ticker'));
 register(require('./widgets/stock-wallet'));
 register(require('./widgets/podcast-card'));
 register(require('./widgets/video-feed'));
+register(require('./widgets/media-star'));
+
 register(require('./widgets/seasonal-card'));
 
 function handle(request = {}) {

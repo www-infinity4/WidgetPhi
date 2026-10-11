@@ -1,0 +1,117 @@
+{
+  "schema": "phi.skills.media-star/v1",
+  "version": "2026-10-11",
+  "source": "WidgetPhi",
+  "triggers": [
+    {
+      "id": "source-discovery",
+      "path": "skills/media-source-discovery/SKILL.md",
+      "agent": "pink-panther",
+      "event": [
+        "search_completed",
+        "collect_saved",
+        "media_requested"
+      ],
+      "outputs": [
+        "sourced_media_candidates"
+      ],
+      "preflight": [
+        "query_exists",
+        "source_provenance"
+      ]
+    },
+    {
+      "id": "assemble-media-star",
+      "path": "skills/media-star-card-assembly/SKILL.md",
+      "agent": "greenbeans",
+      "event": [
+        "owner_accepts_add_media_star"
+      ],
+      "requires": [
+        "sourced_media_candidates"
+      ],
+      "outputs": [
+        "media_star_draft",
+        "site_preview"
+      ],
+      "preflight": [
+        "owner_approval"
+      ]
+    },
+    {
+      "id": "cloudflare-publisher",
+      "path": "skills/cloudflare-media-publisher/SKILL.md",
+      "agent": "purple-reign",
+      "event": [
+        "owner_requests_publish"
+      ],
+      "requires": [
+        "media_star_draft",
+        "authorized_site"
+      ],
+      "outputs": [
+        "d1_tenant",
+        "deployment_receipt"
+      ],
+      "preflight": [
+        "verified_existing_bindings",
+        "tests_green",
+        "source_rights"
+      ]
+    },
+    {
+      "id": "creator-entitlement",
+      "path": "skills/starquest-creator-settlement/SKILL.md",
+      "agent": "blueberry",
+      "event": [
+        "owner_enables_paid_card"
+      ],
+      "requires": [
+        "verified_creator_ledger",
+        "atomic_debit_payout_receipt"
+      ],
+      "outputs": [
+        "settled_receipt",
+        "paid_entitlement"
+      ],
+      "preflight": [
+        "confirmed_recipient",
+        "idempotency",
+        "wallet_ownership"
+      ]
+    },
+    {
+      "id": "media-repair-watch",
+      "path": "skills/phi-media-repair-watch/SKILL.md",
+      "agent": "pink-panther",
+      "event": [
+        "media_dead",
+        "ci_failed",
+        "ledger_discrepancy",
+        "source_feed_empty"
+      ],
+      "outputs": [
+        "failure_receipt",
+        "minimal_patch_pr"
+      ],
+      "preflight": [
+        "source_evidence",
+        "safe_rollback"
+      ]
+    }
+  ],
+  "defaults": {
+    "data": "shared_platform_D1_isolated_by_site_and_owner",
+    "charging": "disabled_until_receipt",
+    "selection": "unseen_random",
+    "playback": "official_provider_first",
+    "sourceTypePolicy": "no_unlicensed_rehosting",
+    "unavailableContent": "skip_and_report"
+  },
+  "references": [
+    "workers/media-star-tenants/schema.sql",
+    "src/media-curation.js",
+    "src/widgets/media-star.js",
+    "catalog/media-star-player.js"
+  ]
+}

@@ -1,0 +1,49 @@
+name: WidgetPhi Robot Card Workshop
+on:
+  pull_request:
+    paths:
+      - 'bots/**'
+      - 'test/**'
+      - 'package.json'
+      - '.github/workflows/card-workshop.yml'
+  issues:
+    types: [opened, edited, reopened]
+  repository_dispatch:
+    types: [widgetphi-card-request]
+  workflow_dispatch:
+    inputs:
+      card_issue_number:
+        description: "Existing WidgetPhi card request issue number (blank: scan source repos)"
+        required: false
+        type: string
+  schedule:
+    - cron: '41 * * * *'
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency:
+  group: widgetphi-card-workshop
+  cancel-in-progress: false
+jobs:
+  card-workshop:
+    if: github.event_name != 'issues' || startsWith(github.event.issue.title, '[Card New]') || startsWith(github.event.issue.title, '[Card Enhance]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify card intake safety and baseline widgets
+        run: |
+          node --check bots/card-engine.mjs
+          node --check bots/runner.mjs
+          npm test
+      - name: Build card proposal or scout source Phi changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node bots/runner.mjs

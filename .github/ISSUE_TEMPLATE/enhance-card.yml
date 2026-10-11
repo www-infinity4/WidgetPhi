@@ -1,0 +1,51 @@
+name: Improve an existing Phi card
+description: Ask WidgetPhi bots to add a reusable capability to an existing card.
+title: "[Card Enhance] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Enter the existing card ID exactly as it appears in WidgetPhi (for example search-engine or infinite-stories). If you only describe behavior, the bot creates an engineering handoff rather than pretending it built a working integration.
+  - type: input
+    id: card
+    attributes:
+      label: Existing card ID
+      placeholder: "infinite-stories"
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: What should change?
+      placeholder: "Add a photo upload control to the story card, preserve existing reader and wallet behavior, and verify the upload is saved under the owner's site."
+    validations:
+      required: true
+  - type: input
+    id: setting-key
+    attributes:
+      label: Setting key
+      description: Optional. For a new customization control (not a backend feature), give a short key such as show-citations.
+  - type: dropdown
+    id: setting-type
+    attributes:
+      label: Setting type
+      description: Leave blank for complex functionality requiring an engineering handoff.
+      options:
+        - text
+        - textarea
+        - boolean
+        - number
+        - select
+  - type: input
+    id: setting-label
+    attributes:
+      label: Setting label
+  - type: input
+    id: setting-default
+    attributes:
+      label: Setting default value
+  - type: input
+    id: setting-choices
+    attributes:
+      label: Setting choices
+      description: Comma-separated values for select fields.

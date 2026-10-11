@@ -4,6 +4,7 @@
  * No browser API keys, no self-reported owner IDs, no wallet mint/settlement code.
  */
 import catalog from '../catalog/cards.json';
+import {mediaPrivate,mediaPublic} from './media-star-api.mjs';
 
 const cardById = new Map(catalog.cards.map(c => [c.id, c]));
 const idPattern = /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$/;
@@ -148,6 +149,10 @@ async function route(request, env, url, owner) {
   if (!cardMatch) fail(404, 'Unknown endpoint');
   const instanceId = cardMatch[1], cardAction = cardMatch[2] || '';
   const card = await ownCard(db, siteId, instanceId);
+  if (cardAction.startsWith('media/')) {
+    try{return await mediaPrivate({request,db,owner,site,card,action:cardAction})}
+    catch(e){fail(e.status||500,e.message||'media_api_failure')}
+  }
   if (cardAction === 'publish' && method === 'POST') {
     await db.prepare("UPDATE site_cards SET public_enabled=1,updated_at=datetime('now') WHERE site_id=? AND instance_id=?").bind(siteId, instanceId).run();
     return response({ instanceId, published: true });
@@ -182,6 +187,11 @@ async function route(request, env, url, owner) {
 }
 async function publicContent(request, env, url) {
   if (!env.CATALOG_DB) fail(503, 'Catalog database not configured');
+  const mediaMatch=url.pathname.match(/^\/public\/sites\/([^/]+)\/cards\/([^/]+)\/media$/);
+  if(mediaMatch){
+    try{return await mediaPublic(env.CATALOG_DB,mediaMatch[1],mediaMatch[2])}
+    catch(e){fail(e.status||500,e.message||'media_api_failure')}
+  }
   const search = url.pathname.match(/^\/public\/sites\/([^/]+)\/search$/);
   if (search) {
     const siteId = search[1];

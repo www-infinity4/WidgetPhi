@@ -710,6 +710,87 @@
       "attributionState": "unverified",
       "version": 1,
       "active": 1
+    },
+    {
+      "id": "shop-phi",
+      "name": "Shop Phi · Curated Store",
+      "category": "Markets & Utilities",
+      "description": "A reusable creator-curated product/store/advertisement collection. The first chosen item is free; creator-priced future choices require a verified Unified Wallet settlement.",
+      "sourceRepo": "www-infinity4/Shop-Phi",
+      "sourcePath": "index.html",
+      "readiness": "existing",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Name this Shop Phi card",
+          "type": "text",
+          "default": "My Curated Store"
+        },
+        {
+          "key": "creatorBrand",
+          "label": "Curator display name",
+          "type": "text",
+          "default": "My Picks"
+        },
+        {
+          "key": "query",
+          "label": "Curated topic",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "index",
+          "label": "Source product, store, and advertisement links (one per line)",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "priceStarCoins",
+          "label": "Proposed price for next curation (whole StarCoins)",
+          "type": "number",
+          "min": 0,
+          "max": 100,
+          "default": 1
+        },
+        {
+          "key": "firstFree",
+          "label": "First featured selection is free",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "key": "selectionMode",
+          "label": "Curator selection order",
+          "type": "select",
+          "options": [
+            "no-repeat-shuffle",
+            "owner-sequence"
+          ],
+          "default": "no-repeat-shuffle"
+        },
+        {
+          "key": "showSponsorDisclosure",
+          "label": "Label paid placements and affiliate links",
+          "type": "boolean",
+          "default": true
+        }
+      ],
+      "keywords": [
+        "shop",
+        "shop phi",
+        "store",
+        "curated ads",
+        "advertisements",
+        "products",
+        "merchant",
+        "storefront",
+        "paid curation",
+        "affiliates"
+      ],
+      "foundationCreatorSub": null,
+      "attributionState": "unverified",
+      "version": 1,
+      "active": 1
     }
   ]
 }

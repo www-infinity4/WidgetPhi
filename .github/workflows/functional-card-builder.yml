@@ -16,6 +16,8 @@ on:
       - 'bots/card-build-runner.mjs'
       - 'bots/gemini-card-planner.mjs'
       - 'test/card-build-runner.test.mjs'
+      - 'catalog/generated/**'
+      - 'catalog/jobs/*-functional.json'
       - '.github/workflows/functional-card-builder.yml'
 permissions:
   contents: write

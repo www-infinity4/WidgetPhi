@@ -8,11 +8,11 @@ export function requestFromIssue(issue){
  const raw=body.match(/^\s*Symbols?\s*:\s*(.+)$/im)?.[1]||'';
  const symbols=[...new Set(raw.split(/[,\s]+/).map(s=>s.trim().toUpperCase()).filter(Boolean))].slice(0,15);
  const urls=[...new Set((body.match(/https:\/\/[^\s<>"']+/g)||[]).map(x=>x.replace(/[),.;]+$/,'')))].slice(0,40);
- return {number:issue.number,title,body,symbols,urls,author:issue.user?.login||''};
+ return {number:issue.number,title,body,intent:issue.title||'',symbols,urls,author:issue.user?.login||''};
 }
 export function build(request,preferred=''){
  if(!request)return{status:'not_a_card_job'};
- const text=request.title+' '+request.body;
+ const text=request.title+' '+request.body+' '+(request.intent||'');
  const match=/\b(shop phi|curated store|curated ads|advertisement card|storefront)\b/i.test(text)?'shop-phi':
  /\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':
  /\b(media star|audio gallery|curated media)\b/i.test(text)?'media-star':

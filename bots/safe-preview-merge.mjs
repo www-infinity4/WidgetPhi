@@ -46,7 +46,7 @@ export async function mergeSafe({api=github}={}){
     if(receipt.issueNumber!==Number(issueId)||receipt.status!=='tested_native_component'||receipt.walletCharged!==false||receipt.deployed!==false)
      throw Error('build_receipt_mismatch');
     execFileSync('npm',['test'],{stdio:'pipe',timeout:180000,
-      env:{...process.env,GITHUB_TOKEN:'',GH_TOKEN:'',GEMINI_API_KEY:''}});
+      env:{...process.env,GITHUB_TOKEN:'',GH_TOKEN:'',GHP:'',GEMINI_API_KEY:''}});
     suitePassed=true;
    }finally{
     execFileSync('git',['switch','main'],{stdio:'pipe'});

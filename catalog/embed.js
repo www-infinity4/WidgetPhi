@@ -102,6 +102,17 @@ function viewer(card,instance,root){
   title.focus();
  });
 }
+function templateStarter(card,instance,options,root){
+ const settings=instance.settings||{},index=String(settings.index||settings.siteIndex||'');
+ const topics=[...new Set(index.split(',').map(s=>s.trim()).filter(Boolean))].slice(0,24);
+ notice(card,'Reusable card starter. Your website owns these topics; custom feature behavior awaits a tested WidgetPhi adapter.');
+ if(topics.length){
+  const label=append(card,dom('h3','Your topics'));
+  const list=append(card,dom('ul'));
+  for(const topic of topics){const li=append(list,dom('li'));append(li,dom('span',text(topic,100)));}
+ }
+ search(card,{...instance,settings:{...settings,mode:'links-only'}},options,root);
+}
 function mount(root,manifest,options={}){
  if(!root||typeof root.appendChild!=='function')throw new Error('Mount target required');
  if(!manifest||manifest.schema!=='widgetphi.site'||!Array.isArray(manifest.cards))throw new Error('WidgetPhi site manifest required');
@@ -122,7 +133,9 @@ function mount(root,manifest,options={}){
      notice(card,'Connect authorized station recordings using the existing Infinity Radio integration.');break;
    case 'media-star':case 'podcast-card':case 'video-feed':
      notice(card,'Connect verified provider episodes or authorized uploads through this card adapter.');break;
-   default:notice(card,'Connect the existing WidgetPhi '+instance.cardId+' adapter in Code Phi.');break;
+   default:if(instance.cardId==='stock-card'||instance.cardId==='market-ticker'){
+      notice(card,'Connect the existing WidgetPhi '+instance.cardId+' adapter in Code Phi.');
+     }else templateStarter(card,instance,options,root);break;
   }
  }
  return root;

@@ -716,8 +716,8 @@
       "name": "Shop Phi · Curated Store",
       "category": "Markets & Utilities",
       "description": "A reusable creator-curated product/store/advertisement collection. The first chosen item is free; creator-priced future choices require a verified Unified Wallet settlement.",
-      "sourceRepo": "www-infinity4/Shop-Phi",
-      "sourcePath": "index.html",
+      "sourceRepo": "www-infinity4/WidgetPhi",
+      "sourcePath": "src/widgets/shop-phi.js",
       "readiness": "existing",
       "settings": [
         {

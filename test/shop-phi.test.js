@@ -41,3 +41,11 @@ test('Shop Phi does not invent product prices or sponsorship',()=>{
  assert.equal(v.items[0].sponsored,false);
  assert.match(shop.build({items:v.items}),/not a paid placement/);
 });
+
+test('Only genuinely paid or affiliate source links are marked sponsored',()=>{
+ const free=shop.build({items:[{title:'Independent creator product',url:'https://example.org/item'}]});
+ assert.match(free,/rel="noopener noreferrer"/);
+ assert.doesNotMatch(free,/rel="noopener noreferrer sponsored"/);
+ const paid=shop.build({items:[{title:'Sponsored seller product',url:'https://example.org/paid',sponsored:true,sponsor:'Seller'}]});
+ assert.match(paid,/rel="noopener noreferrer sponsored"/);
+});

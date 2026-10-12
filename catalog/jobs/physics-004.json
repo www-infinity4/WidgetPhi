@@ -1,0 +1,15 @@
+{
+  "schema": "widgetphi.infinity-concept-build/v1",
+  "id": "physics-004",
+  "number": 4,
+  "title": "Walking Water Without Lifting the Cup",
+  "widget": "infinity-concept",
+  "sourceUrls": [
+    "https://www.sciencebuddies.org/stem-activities/walking-water"
+  ],
+  "character": "Professor Willow · fictional experiment host",
+  "storyAttached": true,
+  "status": "sourced_draft_requires_ci_and_review",
+  "walletCharged": false,
+  "deployed": false
+}

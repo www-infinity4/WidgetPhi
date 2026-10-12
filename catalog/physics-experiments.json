@@ -1,0 +1,201 @@
+{
+  "schema": "widgetphi.physics-seed/v1",
+  "branding": "Infinity 2026®",
+  "notice": "Original summaries inspired by cited educational references; not quotations or numbered demonstrations attributed to Julius Sumner Miller.",
+  "experiments": [
+    {
+      "number": 1,
+      "id": "physics-001",
+      "title": "The Balloon That Clings to a Wall",
+      "description": "Can an ordinary balloon stay on a wall without glue? Change one variable and record how long it clings.",
+      "principle": "Frictional contact transfers charge between some materials. A charged balloon polarizes the nearby wall surface, creating an electrostatic attraction.",
+      "materials": [
+        "An inflated balloon",
+        "A wool scarf or sweater",
+        "A dry, clean wall",
+        "A timer"
+      ],
+      "steps": [
+        "Rub the balloon against wool for five strokes.",
+        "Gently place the rubbed side against the wall and release it.",
+        "Measure how many seconds it remains on the wall.",
+        "Repeat with ten strokes, keeping other conditions similar. Compare the times."
+      ],
+      "safety": "Keep loose balloon pieces away from young children; avoid latex if allergic.",
+      "sources": [
+        {
+          "label": "Science Buddies · Static electricity STEM activity",
+          "url": "https://www.sciencebuddies.org/stem-activities/rubbing-up-against-static-electricity"
+        }
+      ],
+      "character": "Julius Sumner Miller · historical science educator",
+      "story": {
+        "title": "The Wall That Held a Secret",
+        "character": "Oracle, the curious guide",
+        "body": "In a quiet classroom, a balloon appeared to defy gravity. Oracle asked the students to count the rubs and time what happened. They soon discovered that careful measurements can turn a surprise into an experiment."
+      }
+    },
+    {
+      "number": 2,
+      "id": "physics-002",
+      "title": "Pendulum: Does Length Change the Rhythm?",
+      "description": "Build two simple pendulums and measure how length affects their swing time.",
+      "principle": "For a small-angle simple pendulum, the period grows approximately with the square root of its length. The bob mass has little effect under ideal conditions.",
+      "materials": [
+        "String",
+        "Two small identical washers",
+        "Ruler",
+        "Stopwatch",
+        "Secure low support"
+      ],
+      "steps": [
+        "Tie one washer to a 30 cm string on a stable support.",
+        "Pull it aside by a small angle and release without pushing.",
+        "Time ten complete swings; divide by ten.",
+        "Repeat at 60 cm length, keeping the release angle and washer the same."
+      ],
+      "safety": "Use small, lightweight washers, keep the swinging path clear, and avoid overhead installation.",
+      "sources": [
+        {
+          "label": "The Physics Classroom · Pendulum Motion",
+          "url": "https://www.physicsclassroom.com/class/waves/Lesson-0/Pendulum-Motion"
+        }
+      ],
+      "character": "Ada · inventive physics explorer",
+      "story": {
+        "title": "The Clockmaker’s Two Strings",
+        "character": "Ada",
+        "body": "Ada had two clocks that never quite agreed. She tested the lengths of their pendulums, wrote down ten swings at a time, and found a rule hidden in their rhythm."
+      }
+    },
+    {
+      "number": 3,
+      "id": "physics-003",
+      "title": "Where Do the Rainbow Colors Hide?",
+      "description": "Make a miniature spectrum from daylight and observe how color separates.",
+      "principle": "White light includes many visible wavelengths. Refraction and internal reflection in water can separate colors into a spectrum.",
+      "materials": [
+        "Shallow tray of water",
+        "White paper",
+        "A small mirror",
+        "Daylight from a window"
+      ],
+      "steps": [
+        "Put a shallow layer of water in the tray.",
+        "Set the small mirror partly into the water at an angle.",
+        "Aim daylight onto the mirror so reflected light falls onto white paper.",
+        "Adjust the paper and mirror until you find colors; record the order."
+      ],
+      "safety": "Never look directly at the Sun or aim focused reflections into eyes. Use only daylight, not lasers.",
+      "sources": [
+        {
+          "label": "Science Buddies · How Many Colors in a Rainbow?",
+          "url": "https://www.sciencebuddies.org/stem-activities/rainbow"
+        }
+      ],
+      "character": "Oracle · scientific guide",
+      "story": {
+        "title": "Seven Colors at the Window",
+        "character": "Oracle",
+        "body": "When daylight struck the water, a quiet wall became a little theater of colors. Oracle asked which color appeared first and why the white beam had changed."
+      }
+    },
+    {
+      "number": 4,
+      "id": "physics-004",
+      "title": "Walking Water Without Lifting the Cup",
+      "description": "Can water climb paper and move into a neighboring cup?",
+      "principle": "Capillary action carries water through tiny pores in paper towels. Adhesion, cohesion and surface tension contribute to this transport.",
+      "materials": [
+        "Two clear cups",
+        "Water",
+        "A strip of paper towel",
+        "Food coloring (optional)"
+      ],
+      "steps": [
+        "Fill one cup halfway and leave the second empty.",
+        "Fold the towel into a narrow strip.",
+        "Place one end in the water and the other in the empty cup.",
+        "Check every 15 minutes and record water levels."
+      ],
+      "safety": "Place cups on a spill-proof tray. Do not drink the experimental water.",
+      "sources": [
+        {
+          "label": "Science Buddies · Walking Water",
+          "url": "https://www.sciencebuddies.org/stem-activities/walking-water"
+        }
+      ],
+      "character": "Professor Willow · fictional experiment host",
+      "story": {
+        "title": "A Bridge Made of Paper",
+        "character": "Professor Willow",
+        "body": "Professor Willow forbade the students from moving either cup. Instead of lifting the water, they gave it a path, and watched the bridge slowly do the work."
+      }
+    },
+    {
+      "number": 5,
+      "id": "physics-005",
+      "title": "Paper Airplane: A Study in Drag",
+      "description": "Measure how a small wing change affects distance rather than guessing which plane is fastest.",
+      "principle": "Drag is the air resistance opposite the direction of motion. Changing wing flaps can increase drag and alter a paper aircraft’s flight.",
+      "materials": [
+        "Several sheets of identical paper",
+        "Ruler",
+        "Tape to mark a start line",
+        "Large clear indoor area"
+      ],
+      "steps": [
+        "Fold two matching paper airplanes.",
+        "Throw the first five times from the same line, recording distance.",
+        "Fold small symmetric flaps up on the second plane.",
+        "Throw five times using the same technique and compare average distances."
+      ],
+      "safety": "Keep the test lane free of people; do not point planes toward faces.",
+      "sources": [
+        {
+          "label": "Science Buddies · Paper Airplanes and Aerodynamics",
+          "url": "https://www.sciencebuddies.org/stem-activities/paper-airplanes-aerodynamics"
+        }
+      ],
+      "character": "Captain Nova · fictional test pilot",
+      "story": {
+        "title": "The Plane That Wouldn’t Race",
+        "character": "Captain Nova",
+        "body": "Captain Nova liked sleek designs, but a simple paper wing challenged every assumption. Five flights later, measurements beat the captain’s favorite guess."
+      }
+    },
+    {
+      "number": 6,
+      "id": "physics-006",
+      "title": "How Small Gaps Lift Water",
+      "description": "Compare how far water travels between nearby surfaces, and what happens when the space narrows.",
+      "principle": "Capillary rise is stronger in narrower wettable gaps because the interaction of surface tension and adhesion with geometry can counteract gravity.",
+      "materials": [
+        "Two clear plastic ruler-like strips",
+        "Two paper clips",
+        "A rubber band",
+        "Shallow tray",
+        "Tinted water"
+      ],
+      "steps": [
+        "Place spacers between the strips and hold them together loosely with a rubber band.",
+        "Dip the bottom edge into a shallow tray of colored water.",
+        "Observe the water level.",
+        "Move one spacer away to make a tapered gap, then compare water levels in wide and narrow regions."
+      ],
+      "safety": "Use plastic strips rather than glass to avoid cuts; clean up spills.",
+      "sources": [
+        {
+          "label": "Science Buddies · Capillary Action",
+          "url": "https://www.sciencebuddies.org/stem-activities/capillary-action"
+        }
+      ],
+      "character": "Julius Sumner Miller · historical science educator",
+      "story": {
+        "title": "The Water That Climbed",
+        "character": "The student inventor",
+        "body": "The student could not explain why the water rose higher in the tiniest gap. A second test with a wider gap supplied the missing evidence, and the puzzle opened up."
+      }
+    }
+  ]
+}

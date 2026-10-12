@@ -1,0 +1,50 @@
+name: Infinity Concept Physics Bot
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'catalog/physics-experiments.json'
+      - 'bots/physics-card-engine.mjs'
+      - 'bots/physics-card-runner.mjs'
+      - 'src/widgets/infinity-concept.js'
+      - '.github/workflows/infinity-physics-concepts.yml'
+  pull_request:
+    paths:
+      - 'catalog/physics-experiments.json'
+      - 'bots/physics-card-engine.mjs'
+      - 'bots/physics-card-runner.mjs'
+      - 'src/widgets/infinity-concept.js'
+      - 'test/physics-cards.test.mjs'
+      - '.github/workflows/infinity-physics-concepts.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '17 19 * * *'
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: widgetphi-physics-concept-production
+  cancel-in-progress: false
+jobs:
+  physics-card-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify concept and physics card implementation
+        run: |
+          node --check src/widgets/infinity-concept.js
+          node --check bots/physics-card-engine.mjs
+          node --check bots/physics-card-runner.mjs
+          npm test
+      - name: Produce next sourced physics experiment PR
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node bots/physics-card-runner.mjs

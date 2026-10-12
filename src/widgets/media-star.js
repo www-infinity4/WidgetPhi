@@ -8,11 +8,12 @@ function build(spec={}){
  ' data-phi-manifest="'+esc(JSON.stringify(draft))+'"'+
  ' style="border:2px solid #e1bd53;border-radius:22px;background:linear-gradient(120deg,#fff6c9,#e6d8ff);color:#2d203a;padding:18px;font-family:system-ui,sans-serif">'+
  '<small>✦ MEDIA STAR · CUSTOM CURATION</small><h2>'+esc(draft.title)+'</h2>'+
- '<p>Curated from your approved research, media and collected cards. Each selection remains tied to its source.</p>'+
+ '<label>Choose a person <select data-phi-media-person aria-label="Media Star person"><option value="">Everyone</option>'+
+ [...new Set([...draft.items.map(x=>x.creatorLabel),...(Array.isArray(spec.following)?spec.following.map(x=>typeof x==='string'?x:String(x.name||x.handle||'')):[])].filter(Boolean))].map(name=>'<option value="'+esc(name)+'">'+esc(name)+'</option>').join('')+'</select></label>'+
  '<div data-phi-media-stage role="region" aria-label="Current selected media">'+
  '<p>Select a sourced episode, artwork, video, or audio clip.</p></div>'+
  '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
- '<button type="button" data-phi-media-action="roll" style="min-height:44px;padding:10px 15px">🎲 Shuffle a free preview</button>'+
+ '<button type="button" data-phi-media-action="roll" style="min-height:44px;padding:10px 15px">▶ Next recording</button>'+
  '<button type="button" data-phi-media-action="unlock" disabled title="Creator-owned server entitlement has not been connected" style="min-height:44px;padding:10px 15px">'+(locked?'Unlock next · '+draft.pricing.proposedStarCoins+' StarCoin(s)':'Paid unlocks disabled')+'</button></div>'+
  '<p data-phi-media-status role="status">Free preview ready. Paid unlocks require a real creator ledger and receipt; they are disabled in this template.</p>'+
  '<details><summary>Research & source index · '+draft.items.length+' items</summary><ol>'+

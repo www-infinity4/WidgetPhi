@@ -1,0 +1,15 @@
+{
+  "schema": "widgetphi.infinity-concept-build/v1",
+  "id": "physics-002",
+  "number": 2,
+  "title": "Pendulum: Does Length Change the Rhythm?",
+  "widget": "infinity-concept",
+  "sourceUrls": [
+    "https://www.physicsclassroom.com/class/waves/Lesson-0/Pendulum-Motion"
+  ],
+  "character": "Ada · inventive physics explorer",
+  "storyAttached": true,
+  "status": "sourced_draft_requires_ci_and_review",
+  "walletCharged": false,
+  "deployed": false
+}

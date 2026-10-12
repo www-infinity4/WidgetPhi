@@ -1,6 +1,7 @@
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);
 const widgetPhi=require('../src/index.js');
+const physicsSeeds=require('../catalog/physics-experiments.json').experiments;
 const tidy=s=>String(s||'').trim().slice(0,2500);
 export function requestFromIssue(issue){
  if(!/^\[Card Build\]\s+/i.test(issue?.title||''))return null;
@@ -13,7 +14,9 @@ export function requestFromIssue(issue){
 export function build(request,preferred=''){
  if(!request)return{status:'not_a_card_job'};
  const text=request.title+' '+request.body+' '+(request.intent||'');
- const match=/\b(shop phi|curated store|curated ads|advertisement card|storefront)\b/i.test(text)?'shop-phi':
+ const match=/\b(physics experiment|physics concept)\b/i.test(text)?'infinity-concept':
+ /\b(infinity concept|concept card)\b/i.test(text)?'infinity-concept':
+ /\b(shop phi|curated store|curated ads|advertisement card|storefront)\b/i.test(text)?'shop-phi':
  /\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':
  /\b(media star|audio gallery|curated media)\b/i.test(text)?'media-star':
  /\b(youtube|video feed|video gallery)\b/i.test(text)?'video-feed':
@@ -21,7 +24,26 @@ export function build(request,preferred=''){
  const widget=widgetPhi.list().includes(preferred)?preferred:match;
  if(!widget)return{status:'needs_adapter',reason:'No implemented card matches this request'};
  const spec={title:request.title};
- if(widget==='market-ticker'||widget==='stock-card'){
+ if(widget==='infinity-concept'){
+  const selected=request.body.match(/^\s*Experiment(?:\s+ID)?\s*:\s*(physics-\d{3})\s*$/im)?.[1];
+  if(/\b(physics experiment|physics concept)\b/i.test(text)){
+   if(!selected)return{status:'needs_source_data',reason:'Specify Experiment: physics-001 (or another reviewed seed ID)'};
+   const e=physicsSeeds.find(x=>x.id===selected);
+   if(!e)return{status:'needs_source_data',reason:'Experiment ID is not in the reviewed science seed'};
+   Object.assign(spec,e,{type:'physics-experiment'});
+  }else{
+   const description=request.body.match(/^\s*Description\s*:\s*(.+)$/im)?.[1];
+   if(!description)return{status:'needs_source_data',reason:'Add Description: ... to build a substantive concept'};
+   spec.description=description;
+   spec.principle=request.body.match(/^\s*Principle\s*:\s*(.+)$/im)?.[1]||'';
+   spec.character=request.body.match(/^\s*Character\s*:\s*(.+)$/im)?.[1]||'Oracle Guide';
+   const storyTitle=request.body.match(/^\s*Story Title\s*:\s*(.+)$/im)?.[1]||'';
+   const storyBody=request.body.match(/^\s*Story\s*:\s*(.+)$/im)?.[1]||'';
+   const storyUrl=request.body.match(/^\s*Story URL\s*:\s*(https:\/\/\S+)/im)?.[1]||'';
+   if(storyBody||storyUrl)spec.story={title:storyTitle||'Story',body:storyBody,url:storyUrl};
+   spec.type='concept';
+  }
+ }else if(widget==='market-ticker'||widget==='stock-card'){
   if(!request.symbols.length||request.symbols.some(s=>!/^(?:[A-Z0-9._-]{2,20}:)?[A-Z0-9.^-]{1,16}$/.test(s)))
    return{status:'needs_source_data',reason:'Add explicit Symbols: NASDAQ:AAPL,NASDAQ:MSFT; the bot must not guess stocks'};
   if(widget==='market-ticker')spec.symbols=request.symbols;

@@ -549,6 +549,111 @@
           "default": true
         }
       ]
+    },
+    {
+      "id": "infinity-concept",
+      "name": "Infinity Concept Card",
+      "category": "Reading & Stories",
+      "source": "WidgetPhi · Infinity 2026®",
+      "readiness": "integration",
+      "summary": "A single original gold 1/1 concept card for inventions, science, research or ideas. Assign any guide character and attach an in-card story or website link.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Concept card name",
+          "type": "text",
+          "default": "My Infinity Concept"
+        },
+        {
+          "key": "mode",
+          "label": "Concept type",
+          "type": "select",
+          "options": [
+            "concept",
+            "physics-experiment",
+            "invention",
+            "research",
+            "story"
+          ],
+          "default": "concept"
+        },
+        {
+          "key": "character",
+          "label": "Guide or story character",
+          "type": "text",
+          "default": "Oracle Guide"
+        },
+        {
+          "key": "index",
+          "label": "Concept and research index",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "storyTitle",
+          "label": "Optional attached story title",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "storyBody",
+          "label": "Optional original story text",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "storyUrl",
+          "label": "Optional published story website URL",
+          "type": "text",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "id": "physics-experiment",
+      "name": "Infinity Physics Experiment",
+      "category": "Reading & Stories",
+      "source": "WidgetPhi · vetted physics experiment queue",
+      "readiness": "integration",
+      "summary": "A front-only Infinity 2026® gold physics experiment with repeatable steps, safety, cited sources, optional short story and changeable guide characters.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Physics series name",
+          "type": "text",
+          "default": "Infinity Physics"
+        },
+        {
+          "key": "character",
+          "label": "Preferred experiment guide",
+          "type": "text",
+          "default": "Julius Sumner Miller"
+        },
+        {
+          "key": "index",
+          "label": "Topics and verified experiment sources",
+          "type": "textarea",
+          "default": "Pendulums, optics, electricity, motion"
+        },
+        {
+          "key": "storyTitle",
+          "label": "Optional story title",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "storyBody",
+          "label": "Optional story",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "storyUrl",
+          "label": "Story or website link",
+          "type": "text",
+          "default": ""
+        }
+      ]
     }
   ]
 }

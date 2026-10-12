@@ -1,0 +1,15 @@
+{
+  "schema": "widgetphi.infinity-concept-build/v1",
+  "id": "physics-003",
+  "number": 3,
+  "title": "Where Do the Rainbow Colors Hide?",
+  "widget": "infinity-concept",
+  "sourceUrls": [
+    "https://www.sciencebuddies.org/stem-activities/rainbow"
+  ],
+  "character": "Oracle · scientific guide",
+  "storyAttached": true,
+  "status": "sourced_draft_requires_ci_and_review",
+  "walletCharged": false,
+  "deployed": false
+}

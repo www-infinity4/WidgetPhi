@@ -27,7 +27,15 @@ textarea{min-height:96px;resize:vertical}input[type=checkbox]{width:22px;height:
 .rack{list-style:none;margin:0;padding:0}.rack li{background:#241a39;border:1px solid #554675;border-radius:12px;margin-bottom:9px;padding:12px}
 .preview{min-height:90px;border:1px dashed #917abc;padding:13px;border-radius:12px;margin-top:12px;background:#110d1b}
 .notice{border-left:4px solid #f2ca67;background:#2a2033;padding:11px;border-radius:5px}
-#message{min-height:25px;color:#d7c4ff}footer{padding:10px 18px 30px;color:#cbbfe4}
+#message{min-height:25px;color:#d7c4ff}
+.personal-card{padding:12px;background:#241a39;border:1px solid #6d5395;border-radius:14px;min-width:0}
+.personal-card h3{margin:0 0 4px}.personal-card p{overflow-wrap:anywhere}
+.personal-card .provider{background:#fff;color:#241b30;border-radius:10px;overflow:hidden;max-width:100%}
+.personal-card .provider .widgetphi-stock-card{margin:8px 0}
+.personal-card .provider .widgetphi-market-ticker{min-height:72px}
+.personal-card button{margin:5px 5px 5px 0}
+#personalCards{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+footer{padding:10px 18px 30px;color:#cbbfe4}
 @media(max-width:820px){main{display:block}.cards{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.panel{padding:14px}}
 @media(prefers-reduced-motion:no-preference){button{transition:background .15s}}
 </style></head><body>
@@ -35,6 +43,18 @@ textarea{min-height:96px;resize:vertical}input[type=checkbox]{width:22px;height:
 <p>Select a feature, customize it for your website, and add it to your collection. No site forking and no Cloudflare dashboard required to prepare a design.</p>
 <p class="muted">Draft builder: saves configuration to a downloadable file. Database creation and live publishing require the authenticated Phi hosting service.</p></div></header>
 <main><div>
+<section class="panel" id="personalWorkspace">
+ <h2>My private QuantaPhi workspace</h2>
+ <p class="muted">Describe what you want on your own page. Blue recognizes the card, and the existing WidgetPhi adapter is reused when ready.</p>
+ <form id="personalRequestForm">
+  <label for="personalRequest">What would you like to add to your QuantaPhi?</label>
+  <input id="personalRequest" maxlength="800" required placeholder="Add a stock card for NASDAQ:AAPL">
+  <button type="submit" class="primary">Add to my private page</button>
+ </form>
+ <div id="personalStatus" role="status" aria-live="polite" class="muted"></div>
+ <div id="personalCards" class="cards" aria-label="My personal cards"></div>
+ <p class="muted small">Personal mode is saved only in this browser profile; it is not yet encrypted account sync. It does not publish a website, trigger robots, mint or spend tokens. New adapter requests are saved locally for a verified bot handoff.</p>
+</section>
 <section class="panel"><h2>1. Find a card</h2><label for="catalogSearch">Search catalog</label>
 <input id="catalogSearch" type="search" placeholder="Search engine, asteroid, story, radio...">
 <div class="filters" id="filters" aria-label="Card categories"></div><div id="cards" class="cards" aria-live="polite"></div></section></div>
@@ -49,6 +69,8 @@ textarea{min-height:96px;resize:vertical}input[type=checkbox]{width:22px;height:
 <section class="panel"><h2>How user-owned data works</h2><p>Story index, lessons, searches and media libraries belong to the website that adds the card. They must not reuse the original owner's content database.</p>
 <p class="notice">A live hosted card needs the authenticated Phi database gateway. Paid access stays inactive until the Unified Wallet confirms settlement on the server.</p></section>
 </aside></main><footer>WidgetPhi reusable card catalog · Independent site configuration</footer>
+<script src="./personal-requests.js"></script>
+<script defer src="../browser/widgetphi-stock.js"></script>
 <script>
 (function(){
 'use strict';
@@ -136,6 +158,98 @@ function preview(entry,d){
   add(area,node('p','small','This is a configurable card shell. New stories, audio and search results require an authorized content pipeline.'));
  }
 }
+// A personal page is distinct from the publishable site-manifest builder.
+const PERSONAL_KEY='widgetphi:private-cards:v1';
+let privateCards=[];
+function privateStatus(message){el('personalStatus').textContent=message;}
+function restorePrivate(){
+ try{
+  const parsed=JSON.parse(localStorage.getItem(PERSONAL_KEY)||'[]');
+  privateCards=Array.isArray(parsed)?parsed.slice(0,40).filter(x=>x&&typeof x.id==='string'&&
+    typeof x.prompt==='string'&&x.prompt.length<=800&&typeof x.cardId==='string'&&typeof x.status==='string'):[];
+ }catch{privateCards=[];}
+}
+function persistPrivate(){
+ try{localStorage.setItem(PERSONAL_KEY,JSON.stringify(privateCards));return true}
+ catch{privateStatus('This tab shows the cards, but browser storage is blocked; they will not survive closing it.');return false}
+}
+function stockSymbols(text){return window.WidgetPhiPersonalRequests.symbolsFrom('ticker '+text);}
+function renderPrivate(){
+ const board=el('personalCards');board.replaceChildren();
+ if(!privateCards.length){add(board,node('p','muted','Your personal space is empty. Try “Add a stock card for NASDAQ:AAPL”.'));return;}
+ for(const entry of privateCards){
+  const def=state.definitions.find(d=>d.id===entry.cardId);
+  if(!def&&entry.status!=='needs-adapter')continue;
+  const card=add(board,node('article','personal-card'));
+  add(card,node('div','category',entry.status==='needs-adapter'?'BOT ADAPTER REQUEST':'PRIVATE · '+(def?.category||'CARD')));
+  add(card,node('h3','',entry.settings?.title||def?.name||'New card request'));
+  add(card,node('p','small',entry.prompt));
+  const status=add(card,node('p','muted small',entry.status==='needs-adapter'?
+   'Saved for future authenticated Blue → Purple → Green → Black handoff. Not sent to robots.':
+   entry.reason||'Card configured.'));
+  const provider=add(card,node('div','provider'));
+  const valid=Array.isArray(entry.symbols)&&entry.symbols.length>0;
+  if((entry.cardId==='stock-card'||entry.cardId==='market-ticker')&&valid){
+   try{
+    const runtime=window.WidgetPhiStock;
+    if(!runtime)throw new Error('Market adapter not loaded yet; refresh when scripts are available.');
+    if(entry.cardId==='stock-card'){
+     const parts=entry.symbols[0].split(':');const symbol=parts.pop(),exchange=parts.join(':');
+     runtime.renderCard({symbol,exchange,company:entry.settings?.title||symbol},provider);
+    }else{
+     const section=add(provider,node('section'));section.dataset.widgetphiTradingview='ticker';
+     section.setAttribute('data-config',encodeURIComponent(JSON.stringify({
+      symbols:entry.symbols.map(x=>({proName:x,title:x.split(':').at(-1)})),
+      colorTheme:'light',displayMode:'adaptive',isTransparent:false,showSymbolLogo:true,locale:'en'
+     })));
+     runtime.mount(provider);
+    }
+   }catch(error){add(provider,node('p','small',error.message));}
+  }else if(entry.status==='needs-input'){
+   const form=add(card,node('form'));
+   const label=add(form,node('label','',entry.cardId==='market-ticker'?'Exchange/ticker symbols':'Exchange/ticker symbol'));
+   const input=add(form,node('input'));input.placeholder='NASDAQ:AAPL';input.required=true;input.maxLength=160;
+   label.appendChild(input);
+   const submit=add(form,node('button','','Activate stock card'));submit.type='submit';
+   form.addEventListener('submit',event=>{
+    event.preventDefault();const symbols=stockSymbols(input.value);
+    if(!symbols.length){status.textContent='Please enter a ticker or exchange symbol (e.g. NASDAQ:AAPL).';return;}
+    entry.symbols=entry.cardId==='stock-card'?symbols.slice(0,1):symbols;
+    entry.settings.index=entry.symbols.join(',');
+    entry.status='configured';entry.reason='Existing WidgetPhi market adapter selected · quotes are supplied by TradingView.';
+    persistPrivate();renderPrivate();
+   });
+  }else if(entry.status!=='needs-adapter'){
+   add(provider,node('p','small','Saved card configuration. '+(def?.readiness==='existing'?
+     'A verified media/source or hosted renderer is needed for full interaction.':
+     'A tested, authorized card adapter is still required before this becomes a working player.')));
+  }
+  if(entry.status==='needs-adapter'){
+   const copy=add(card,node('button','','Copy bot request'));copy.type='button';
+   copy.addEventListener('click',async()=>{
+    const task='[Card Build] '+entry.prompt+'\\nRoles: Blue resolve intent and provenance; Purple approve reuse; Green implement in sandbox; Black verify tests/private ownership.\\nVisibility: private until the owner authorizes publishing.';
+    try{await navigator.clipboard.writeText(task);privateStatus('Bot request copied. It has not been submitted.');}
+    catch{privateStatus('Clipboard permission unavailable. The request remains in this browser.');}
+   });
+  }
+  const remove=add(card,node('button','','Remove private card'));remove.type='button';
+  remove.addEventListener('click',()=>{privateCards=privateCards.filter(x=>x.id!==entry.id);persistPrivate();renderPrivate();});
+ }
+}
+el('personalRequestForm').addEventListener('submit',event=>{
+ event.preventDefault();
+ const prompt=el('personalRequest').value.trim();
+ const p=window.WidgetPhiPersonalRequests?.plan(prompt,state.definitions);
+ if(!p||p.status==='invalid'){privateStatus(p?.reason||'The card catalog is not loaded.');return;}
+ if(privateCards.length>=40){privateStatus('Private workspace limit reached (40 cards).');return;}
+ if(privateCards.some(x=>x.prompt.toLowerCase()===prompt.toLowerCase())){privateStatus('This request is already in your workspace.');return;}
+ const id='private_'+(globalThis.crypto?.randomUUID?crypto.randomUUID().replaceAll('-',''):String(Date.now()));
+ privateCards.unshift({id,prompt,cardId:p.cardId||'',status:p.status,
+  settings:p.settings||{},symbols:p.symbols||[],terms:p.terms||[],reason:p.reason||''});
+ const persisted=persistPrivate();renderPrivate();
+ if(persisted)privateStatus((p.cardName||'New adapter')+' saved to this device’s private page. No robot was invoked.');
+ el('personalRequest').value='';
+});
 function manifest(){
  const title=el('siteTitle').value.trim();if(!title||title.length>120)throw new Error('Enter a website name (up to 120 characters).');
  return {schema:'widgetphi.site',version:1,title,cards:state.instances};
@@ -151,7 +265,7 @@ el('saveJson').addEventListener('click',()=>{try{
  }catch(e){status(e.message)}});
 el('catalogSearch').addEventListener('input',renderCards);
 fetch('./cards.json').then(r=>{if(!r.ok)throw new Error('Catalog not available');return r.json()}).then(data=>{
- state.definitions=data.cards;renderFilters();renderCards();renderRack();status('Catalog loaded: '+state.definitions.length+' reusable cards.');
+ state.definitions=data.cards;restorePrivate();renderPrivate();renderFilters();renderCards();renderRack();status('Catalog loaded: '+state.definitions.length+' reusable cards.');
 }).catch(e=>{el('cards').textContent='Could not load catalog. '+e.message;status('Serve this directory on a web server, not file://.');});
 })();
 </script></body></html>

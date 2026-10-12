@@ -29,3 +29,7 @@ For **any native WidgetPhi card**, pass `spec.story={title,body,character,url}` 
 Historical educator names may be listed as *presentation inspirations*. Never imply that a fictional story, custom experiment number, image, or quotation was created by the historical person unless attributed to a verified source. The six science summaries and story miniatures here are newly written, not copies of source pages. Production art is a separate rights-cleared asset step; card generation must succeed without it.
 
 **Safety and wallet boundary:** generated drafts never bill StarCoins, mint tokens, make creator-payment claims, or write to production D1. The receipt records `walletCharged:false` and `deployed:false` until separate systems supply verified authority.
+
+## On-page generated-card feed
+
+`catalog/physics-built.json` lists only the IDs for which the bot has produced verified static previews on main. The public QuantaPhi Infinity Concept reader may combine this allow-list with `catalog/physics-experiments.json` to show published-to-repository cards. The list is not a production wallet ledger or a claim that the QuantaPhi site deployed. The bot updates the allow-list in the same tested commit as the next preview.

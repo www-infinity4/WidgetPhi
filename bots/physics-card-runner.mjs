@@ -33,9 +33,11 @@ async function main(){
     await mkdir('catalog/jobs',{recursive:true});
     await writeFile('catalog/generated/'+candidate.id+'.html',asDocument(card),'utf8');
     await writeFile('catalog/jobs/'+candidate.id+'.json',JSON.stringify(card.receipt,null,2)+'\n','utf8');
+    const generatedIds=[...new Set([...committed,candidate.id])].sort();
+    await writeFile('catalog/physics-built.json',JSON.stringify({schema:'widgetphi.physics-built/v1',generatedIds},null,2)+'\n','utf8');
     execFileSync('npm',['test'],{stdio:'inherit',env:{...process.env,GITHUB_TOKEN:'',GEMINI_API_KEY:''}});
     git('diff','--check');
-    git('add','catalog/generated/'+candidate.id+'.html','catalog/jobs/'+candidate.id+'.json');
+    git('add','catalog/generated/'+candidate.id+'.html','catalog/jobs/'+candidate.id+'.json','catalog/physics-built.json');
     git('-c','user.name=widgetphi-physics-bot[bot]','-c','user.email=41898282+github-actions[bot]@users.noreply.github.com',
       'commit','-m','Propose Infinity physics concept '+candidate.id);
     // Source-backed seed rows were already code-reviewed before entering main.

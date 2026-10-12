@@ -12,6 +12,8 @@ function mount(card){
  if(data?.schema!=='phi.media-star.collection/v1'||!Array.isArray(data.items))return;
  card.dataset.phiMediaBound='1';
  let used=new Set(),previewCount=0;
+ const person=card.querySelector('[data-phi-media-person]');
+ person?.addEventListener('change',()=>{stage.replaceChildren();status.textContent='Choose Next recording to play '+(person.value||'anyone')+'.'});
  const freeOnly=data.pricing?.paidUnlocksEnabled!==true;
  const priced=Number(data.pricing?.proposedStarCoins||0)>0;
  const elem=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);return n};
@@ -49,8 +51,10 @@ function mount(card){
  button.addEventListener('click',()=>{
   if(!data.items.length){status.textContent='No approved source links attached yet.';return}
   if(freeOnly&&priced&&previewCount>0){status.textContent='Free preview used. Another paid selection requires creator-verified settlement; no StarCoins were charged.';return}
-  let pool=data.items.filter(x=>!used.has(x.id));
-  if(!pool.length){used=new Set();pool=data.items.slice()}
+  const recordings=data.items.filter(x=>!person?.value||x.creatorLabel===person.value);
+  if(!recordings.length){status.textContent='No recordings attached for this person yet.';return}
+  let pool=recordings.filter(x=>!used.has(x.id));
+  if(!pool.length){for(const x of recordings)used.delete(x.id);pool=recordings.slice()}
   const max=4294967296,ceiling=Math.floor(max/pool.length)*pool.length;
   const v=new Uint32Array(1);let n;
   if(!root.crypto?.getRandomValues){status.textContent='Secure random selection unavailable on this device.';return}

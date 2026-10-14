@@ -1,0 +1,15 @@
+{
+  "schema": "widgetphi.infinity-concept-build/v1",
+  "id": "physics-006",
+  "number": 6,
+  "title": "How Small Gaps Lift Water",
+  "widget": "infinity-concept",
+  "sourceUrls": [
+    "https://www.sciencebuddies.org/stem-activities/capillary-action"
+  ],
+  "character": "Julius Sumner Miller · historical science educator",
+  "storyAttached": true,
+  "status": "sourced_draft_requires_ci_and_review",
+  "walletCharged": false,
+  "deployed": false
+}

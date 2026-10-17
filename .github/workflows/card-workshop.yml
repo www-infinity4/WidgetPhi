@@ -47,3 +47,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node bots/runner.mjs
+
+# Bot edit reminder: limit edits to known source paths

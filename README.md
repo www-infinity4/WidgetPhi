@@ -50,3 +50,5 @@ Test with `npm test`.
 Load `browser/widgetphi-podcast.js` once in a published page that includes `podcast-card`. On supported interactions it dispatches `phi:podcast:star`, `phi:podcast:share-evidence`, `phi:podcast:collect-request`, `phi:podcast:episode-completed`, and `phi:podcast:description-closed`. This permits Code Phi to replace the current card on confirmed media completion or after a full description is closed, **but never bypasses a paid episode entitlement**.
 
 The event itself is not a share proof or a wallet transfer. The platform must authenticate the collector/listener's Unified Wallet and validate the action server-side before issuing Infinity-funded share/collect rewards. A paid unlock requires one D1 transaction (idempotency key, debit listener, credit verified creator, receipt for that episode); do not spend a StarCoin only to discover an unplayable page link.
+
+**Tool‑connection repaired – automated edits now confined to allowed source windows.**

@@ -2,7 +2,7 @@
 (function(){
   'use strict';
   const links={
-    opportunities:'https://cardonecapital.com/',
+    opportunities:'https://cardonecapital.com/westshoresouth/',
     portfolio:'https://cardonecapital.com/investments/',
     disclosures:'https://cardonecapital.com/disclosures/',
     contact:'https://cardonecapital.com/contact/'
@@ -11,6 +11,7 @@
     const s=q.toLowerCase();
     if(/(fee|risk|guarante|return|loss|safe|cashflow|liquid)/.test(s))return 'Returns are not guaranteed, investments can be illiquid and loss of principal is possible. Review the official disclosures: '+links.disclosures;
     if(/(bitcoin|btc|hybrid)/.test(s))return 'The company describes real-estate-only and real-estate-plus-Bitcoin strategies. Bitcoin is speculative. Compare the official materials: '+links.opportunities;
+    if(/(westshore|tampa|608|cashflow|cash flow|acres|bay)/.test(s))return '10X Westshore South has 608 residences on approximately 52 acres near Old Tampa Bay, according to the official page. Targeted cashflow is not guaranteed. Property: https://cardonecapital.com/westshoresouth/ . Read current offering documents before investing.';
     if(/(property|portfolio|unit|apartment|rental|asset)/.test(s))return 'View the property portfolio at '+links.portfolio+' for the company\'s own current details.';
     if(/(accredit|eligible|minimum|ira|401|invest|offering|ppm)/.test(s))return 'Investor eligibility and offering terms vary. Refer to official documents and independent advice: '+links.disclosures;
     if(/(human|agent|call|phone|representative|schedule|talk)/.test(s))return 'For a real representative, use Cardone Capital\'s published contact details: '+links.contact+'. This preview cannot transfer or receive calls.';

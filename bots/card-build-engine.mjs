@@ -18,7 +18,8 @@ export function build(request,preferred=''){
  if(!request)return{status:'not_a_card_job'};
  if(request.intakeError)return{status:'needs_source_data',reason:request.intakeError};
  const text=request.title+' '+request.body+' '+(request.intent||'');
- const match=/\b(physics experiment|physics concept)\b/i.test(text)?'infinity-concept':
+ const match=Array.isArray(request.feed?.items)?'source-feed':
+ /\b(physics experiment|physics concept)\b/i.test(text)?'infinity-concept':
  /\b(infinity concept|concept card)\b/i.test(text)?'infinity-concept':
  /\b(shop phi|curated store|curated ads|advertisement card|storefront)\b/i.test(text)?'shop-phi':
  /\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':

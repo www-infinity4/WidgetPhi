@@ -38,3 +38,16 @@ test('approved stream and approved human number work only through configured ser
   assert.match(txt,/<Dial/);assert.match(txt,/\+13055550123/);
   assert.doesNotMatch(await (await post('/voice/intent',{Digits:'2'},{HUMAN_TRANSFER_NUMBER:'javascript:alert(1)'})).text(),/<Dial/);
 });
+
+test('speech recognition fallback answers without collecting financial details and terminates',async()=>{
+  let text=await (await post('/voice/consent',{Digits:'1'})).text();
+  assert.match(text,/input="speech dtmf"/);
+  assert.match(text,/live Bubbles voice service is not connected/);
+  text=await (await post('/voice/inquiry?turn=1',{SpeechResult:'What risks and fees exist?'})).text();
+  assert.match(text,/possible loss of principal/);
+  assert.doesNotMatch(text,/<Connect>/);
+  text=await (await post('/voice/inquiry?turn=4',{SpeechResult:'What about bitcoins?'})).text();
+  assert.match(text,/Hangup/);
+  text=await (await post('/voice/inquiry?turn=1',{Digits:'0'})).text();
+  assert.doesNotMatch(text,/<Dial/);
+});

@@ -107,7 +107,12 @@ function cardoneGuide(card,instance){
  const s=instance.settings||{};
  const section=append(card,dom('div',undefined,'wp-cardone'));
  notice(section,'Independent Bubbles concept only · not endorsed by Cardone Capital. No AI service or call reception is active until explicitly connected.');
- const sources=[['Current opportunities','https://cardonecapital.com/'],['Property portfolio','https://cardonecapital.com/investments/'],['Investment disclosures','https://cardonecapital.com/disclosures/'],['Official contact','https://cardonecapital.com/contact/']];
+ const a=append(section,dom('a',undefined,'wp-source'));a.href='https://cardonecapital.com/westshoresouth/';a.target='_blank';a.rel='noopener noreferrer';a.setAttribute('aria-label','10X Westshore South official property page');
+ const img=append(a,dom('img'));img.src='https://cardonecapital.com/wp-content/uploads/2026/09/10X-Westshore.jpg';img.alt='Cardone Capital official image of multifamily towers and pool at 10X Westshore';img.loading='lazy';img.width=1000;img.height=563;img.style.cssText='display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:14px';
+ append(section,dom('h3','10X Westshore South · Tampa'));
+ notice(section,'608 residences on approximately 52 acres along Old Tampa Bay. Cardone states a targeted 5% cashflow, not a guaranteed return.');
+ notice(section,'Official image attributed to Cardone Capital; paid reuse requires rights approval.');
+ const sources=[['Featured property','https://cardonecapital.com/westshoresouth/'],['Property portfolio','https://cardonecapital.com/investments/'],['Investment disclosures','https://cardonecapital.com/disclosures/'],['Official offering portal','https://invest.cardonecapital.com/'],['Official contact','https://cardonecapital.com/contact/']];
  for(const [title,url] of sources){
   const a=append(section,dom('a',title+' ↗','wp-source'));a.href=url;a.target='_blank';a.rel='noopener noreferrer';
  }

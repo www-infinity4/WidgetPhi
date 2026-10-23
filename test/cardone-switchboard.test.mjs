@@ -51,3 +51,13 @@ test('speech recognition fallback answers without collecting financial details a
   text=await (await post('/voice/inquiry?turn=1',{Digits:'0'})).text();
   assert.doesNotMatch(text,/<Dial/);
 });
+
+test('Cardone source widget features actual offer and official photo',()=>{
+ const w=require('../src/widgets/cardone-capital');
+ const html=w.build({title:'Property Card'});
+ assert.match(html,/10X Westshore South/);
+ assert.match(html,/wp-content\/uploads\/2026\/09\/10X-Westshore\.jpg/);
+ assert.match(html,/608 apartments/);
+ assert.match(html,/not a guaranteed return/);
+ assert.match(html,/invest\.cardonecapital\.com/);
+});

@@ -19,6 +19,7 @@ register(require('./widgets/shop-phi'));
 register(require('./widgets/infinity-concept'));
 
 register(require('./widgets/seasonal-card'));
+register(require('./widgets/cardone-capital'));
 
 function handle(request = {}) {
   if (request.type !== 'build_widget') throw new Error(`Unsupported request type: ${request.type}`);

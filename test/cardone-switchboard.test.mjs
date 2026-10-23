@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHmac,webcrypto} from 'node:crypto';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
 import worker from '../workers/cardone-switchboard/index.mjs';
 if(!globalThis.crypto)globalThis.crypto=webcrypto;
 const env={TWILIO_AUTH_TOKEN:'test-only-key',PUBLIC_VOICE_BASE_URL:'https://calls.example.test/'};

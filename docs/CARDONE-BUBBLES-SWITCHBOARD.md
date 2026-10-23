@@ -5,7 +5,7 @@ This is a **third-party WidgetPhi prototype**, not a Cardone Capital deployment,
 ## Working repository components
 - `src/widgets/cardone-capital.js`: responsive, source-linked independent card. Build via `require('./src').handle({type:'build_widget',widget:'cardone-capital',spec:{title:'Cardone Capital'}})`.
 - `browser/widgetphi-cardone.js`: local source-navigation guide responds in the card; same-origin Bubbles API can answer if an authorized endpoint is provided. The first send to live AI needs visitor consent. On API failure, explicitly labeled fallback is shown. User questions are not logged by this frontend.
-- `workers/cardone-switchboard/index.mjs`: Twilio-compatible **inbound webhook only** for a separately owned number. Verifies HMAC Twilio signatures, offers DTMF choice and explicit AI consent, and only connects to an administrator-configured secure media stream or verified human number. It has no phone number, carrier, AI media server, CRM or deployment by itself.
+- `workers/cardone-switchboard/index.mjs`: Twilio-compatible **inbound webhook only** for a separately owned number. Verifies HMAC Twilio signatures, offers DTMF choice and explicit AI consent, and only connects to an administrator-configured secure media stream or verified human number. It includes a bounded, consented Twilio speech-recognition and spoken FAQ fallback for source navigation, but **not a connected LLM**. It has no phone number, carrier, live AI media server, CRM or deployment by itself.
 - `catalog/cardone-capital.html`: browser-visible independent demo, no live AI or phone service when unconfigured.
 
 ## Mount on a website you control

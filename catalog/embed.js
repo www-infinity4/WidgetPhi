@@ -102,6 +102,49 @@ function viewer(card,instance,root){
   title.focus();
  });
 }
+
+function cardoneGuide(card,instance){
+ const s=instance.settings||{};
+ const section=append(card,dom('div',undefined,'wp-cardone'));
+ notice(section,'Independent Bubbles concept only · not endorsed by Cardone Capital. No AI service or call reception is active until explicitly connected.');
+ const sources=[['Current opportunities','https://cardonecapital.com/'],['Property portfolio','https://cardonecapital.com/investments/'],['Investment disclosures','https://cardonecapital.com/disclosures/'],['Official contact','https://cardonecapital.com/contact/']];
+ for(const [title,url] of sources){
+  const a=append(section,dom('a',title+' ↗','wp-source'));a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+ }
+ const chat=append(section,dom('div',undefined,'wp-cardone-chat'));
+ notice(chat,'Guide: I can direct you to official information about real estate opportunities, investing risks, and contacting an investor relations representative.');
+ const form=append(section,dom('form'));
+ const input=append(form,dom('input'));input.type='text';input.required=true;input.maxLength=600;input.placeholder='Ask about property investments or risks';input.setAttribute('aria-label','Ask the Cardone guide');
+ const send=append(form,dom('button','Ask'));send.type='submit';
+ const status=append(section,dom('p','Information-guide preview · live AI unavailable.','wp-muted'));
+ const endpoint=String(s.agentEndpoint||'');
+ const linked=/^\/(?!\/)[a-zA-Z0-9/_-]{1,180}$/.test(endpoint)?endpoint:'';
+ let consent=false;
+ const reply=t=>append(chat,dom('p',t));
+ function fallback(q){
+  const v=q.toLowerCase();
+  if(/risk|fee|return|accredit|eligible|invest|minimum|bitcoin|btc|ira/.test(v))return 'Review the company\'s official offering and risk disclosures: https://cardonecapital.com/disclosures/';
+  if(/portfolio|rental|property|apartment|unit/.test(v))return 'View the official properties and portfolios: https://cardonecapital.com/investments/';
+  return 'For opportunities or human contact visit the official website: https://cardonecapital.com/contact/';
+ }
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();const q=input.value.trim();if(!q)return;input.value='';reply('You: '+q);
+  if(!linked){reply('Guide: '+fallback(q));return;}
+  if(!consent){if(!global.confirm('Send this message to a platform AI service? Do not include identity, financial, account or payment details.')){reply('Guide: '+fallback(q));return;}consent=true;}
+  send.disabled=true;status.textContent='Contacting connected Bubbles service…';
+  const control=new AbortController(),timeout=setTimeout(()=>control.abort(),12000);
+  try{
+   const r=await fetch(linked,{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify({agent:'cardone-real-estate',instanceId:instance.instanceId,message:q}),signal:control.signal});
+   if(!r.ok)throw Error('Unavailable');
+   const data=await r.json();if(typeof data.answer!=='string'||!data.answer.trim())throw Error('Invalid answer');
+   reply('Bubbles: '+data.answer.slice(0,1800));status.textContent='Response received from platform endpoint.';
+  }catch{reply('Guide: '+fallback(q));status.textContent='Live AI unavailable; local source navigation shown.';}
+  finally{clearTimeout(timeout);send.disabled=false;}
+ });
+ const human=append(section,dom('a','Contact a human ↗','wp-source'));human.href='https://cardonecapital.com/contact/';human.target='_blank';human.rel='noopener noreferrer';
+ notice(section,'This card does not transfer phone calls, collect money, verify investor status or offer financial advice.');
+}
+
 function templateStarter(card,instance,options,root){
  const settings=instance.settings||{},index=String(settings.index||settings.siteIndex||'');
  const topics=[...new Set(index.split(',').map(s=>s.trim()).filter(Boolean))].slice(0,24);
@@ -127,6 +170,7 @@ function mount(root,manifest,options={}){
    case 'research-viewer':viewer(card,instance,root);break;
    case 'scholastic-reader':case 'asteroid-reads':case 'infinite-stories':
      reader(card,instance,options,root);break;
+   case 'cardone-capital':cardoneGuide(card,instance);break;
    case 'story-writer':
      notice(card,'Original story generation needs a connected, consent-based Phi writer endpoint.');break;
    case 'infinity-radio':

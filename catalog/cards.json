@@ -5,7 +5,8 @@
     "Search & Research",
     "Reading & Stories",
     "Media & Entertainment",
-    "Markets & Utilities"
+    "Markets & Utilities",
+    "Business & Services"
   ],
   "cards": [
     {
@@ -652,6 +653,40 @@
           "label": "Story or website link",
           "type": "text",
           "default": ""
+        }
+      ]
+    },
+    {
+      "id": "cardone-capital",
+      "name": "Cardone Capital · Bubbles Guide",
+      "category": "Business & Services",
+      "source": "Cardone Capital (official external links) / WidgetPhi independent prototype",
+      "readiness": "integration",
+      "summary": "Independent investor-navigation card with source-linked real estate information, human contact, and a consent-gated Bubbles AI/chat and voice switchboard integration pending business authorization.",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "Cardone Capital"
+        },
+        {
+          "key": "agentLabel",
+          "label": "Assistant display name",
+          "type": "text",
+          "default": "Bubbles · Real Estate Guide"
+        },
+        {
+          "key": "agentEndpoint",
+          "label": "Authorized same-origin Bubbles chat path (server-managed)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "instanceId",
+          "label": "Card identifier",
+          "type": "text",
+          "default": "cardone-guide"
         }
       ]
     }

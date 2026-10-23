@@ -15,6 +15,25 @@ function cleanStream(value){
 function gather(text,action){
   return '<Gather input="dtmf" numDigits="1" method="POST" action="'+xml(action)+'" timeout="7">'+say(text)+'</Gather>'+say('No response received. Goodbye.')+'<Hangup/>';
 }
+function spokenGuide(turn,lead){
+  if(turn>=4)return stop('Thank you for calling. For personal investment questions, use the official company contact page.');
+  const action='/voice/inquiry?turn='+turn;
+  return response(say(lead)+
+    '<Gather input="speech dtmf" speechTimeout="auto" numDigits="1" method="POST" action="'+action+'" timeout="7">'+
+    say('Ask a question about properties, risks, or investor contacts. You may also press zero for a human. Please do not share personal or payment details.')+
+    '</Gather>'+say('I did not hear a question. Goodbye.')+'<Hangup/>');
+}
+function answerInquiry(raw){
+ const question=String(raw||'').trim().slice(0,300).toLowerCase();
+ if(/(human|representative|agent|person|operator|transfer|call back)/.test(question))return {human:true};
+ if(/(risk|loss|return|guarante|dividend|cash flow|fee|minimum|eligible|accredit|ira|401)/.test(question))
+   return {text:'Real estate investments involve risk, including possible loss of principal and limited liquidity. Eligibility, fees, and performance terms vary by offering. Read the official risk disclosures at cardone capital dot com slash disclosures.'};
+ if(/(bitcoin|crypto|btc|hybrid)/.test(question))
+   return {text:'The company lists real estate plus Bitcoin investment strategies. Bitcoin is speculative, and returns are not assured. Read the current offerings and disclosures on the official website.'};
+ if(/(portfolio|property|properties|apartments|units|locations|rental)/.test(question))
+   return {text:'For current multifamily assets and official information, visit cardone capital dot com slash investments.'};
+ return {text:'I can provide general navigation, but I cannot recommend investments or determine eligibility. For official support use cardone capital dot com slash contact.'};
+}
 function constantEqual(a,b){
   if(a.length!==b.length)return false;
   let diff=0;for(let i=0;i<a.length;i++)diff |= a.charCodeAt(i)^b.charCodeAt(i);
@@ -47,7 +66,7 @@ export default {
   async fetch(request,env){
     const u=new URL(request.url);
     if(u.pathname==='/health'&&request.method==='GET')return Response.json({ok:true,service:'bubbles-call-switchboard',inboundLive:false});
-    if(request.method!=='POST'||!['/voice','/voice/intent','/voice/consent','/voice/human'].includes(u.pathname))
+    if(request.method!=='POST'||!['/voice','/voice/intent','/voice/consent','/voice/human','/voice/inquiry'].includes(u.pathname))
       return new Response('Not found',{status:404});
     if(!/application\/x-www-form-urlencoded/i.test(request.headers.get('content-type')||''))
       return new Response('Unsupported media type',{status:415});
@@ -69,8 +88,16 @@ export default {
       if(digit==='2')return human(env);
       if(digit!=='1')return stop('AI consent was not given. Goodbye.');
       const stream=cleanStream(env.BUBBLES_VOICE_STREAM_URL);
-      if(!stream)return stop('The AI voice service is not connected. No call transfer was attempted.');
+      if(!stream)return spokenGuide(1,'The live Bubbles voice service is not connected. An automated information guide can answer simple spoken questions instead.');
       return response(say('You are now connecting to the automated AI assistant. You can hang up at any time.')+'<Connect><Stream url="'+xml(stream)+'"/></Connect>'+say('The AI assistant disconnected. Goodbye.')+'<Hangup/>');
+    }
+    if(u.pathname==='/voice/inquiry'){
+      const turn=Number(u.searchParams.get('turn'));
+      if(!Number.isInteger(turn)||turn<1||turn>4)return stop('Invalid session. Goodbye.');
+      if(digit==='0')return human(env);
+      const answer=answerInquiry(form.get('SpeechResult'));
+      if(answer.human)return human(env);
+      return spokenGuide(turn+1,answer.text);
     }
     return human(env);
   }

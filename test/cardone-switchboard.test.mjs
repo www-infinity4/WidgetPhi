@@ -8,7 +8,7 @@ if(!globalThis.crypto)globalThis.crypto=webcrypto;
 const env={TWILIO_AUTH_TOKEN:'test-only-key',PUBLIC_VOICE_BASE_URL:'https://calls.example.test/'};
 async function post(path,fields={},overrides={}){
   const body=new URLSearchParams(fields),url='https://calls.example.test'+path;
-  const sig=createHmac('sha1',env.TWILIO_AUTH_TOKEN).update(url+[...body].sort(([a],[b])=>a.localeCompare(b,'en')).map(([k,v])=>k+v).join('')).digest('base64');
+  const sig=createHmac('sha1',env.TWILIO_AUTH_TOKEN).update(url+[...body].sort(([a],[b])=>(a<b?-1:a>b?1:0)).map(([k,v])=>k+v).join('')).digest('base64');
   const req=new Request(url,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded','X-Twilio-Signature':sig},body});
   return worker.fetch(req,{...env,...overrides});
 }

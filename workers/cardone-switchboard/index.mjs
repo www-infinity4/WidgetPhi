@@ -31,7 +31,7 @@ async function signatureIsValid(request,env,form){
   const got=request.headers.get('X-Twilio-Signature')||'';
   const u=new URL(request.url);
   // Twilio signs public URL + sorted form fields. Configure exact public origin, no X-Forwarded trust.
-  const pairs=[...form.entries()].sort(([a],[b])=>a.localeCompare(b,'en'));
+  const pairs=[...form.entries()].sort(([a],[b])=>(a<b?-1:a>b?1:0));
   const message=base+u.pathname+u.search+pairs.map(([k,v])=>k+v).join('');
   const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(env.TWILIO_AUTH_TOKEN),{name:'HMAC',hash:'SHA-1'},false,['sign']);
   const bytes=new Uint8Array(await crypto.subtle.sign('HMAC',key,new TextEncoder().encode(message)));

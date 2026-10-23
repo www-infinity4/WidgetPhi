@@ -146,7 +146,11 @@ function renderRack(){
 function preview(entry,d){
  const area=el('preview');area.replaceChildren();const s=entry.settings;
  add(area,node('h3','',s.title||d.name));add(area,node('p','muted',d.summary));
- if(entry.cardId==='search-engine'){
+ if(entry.cardId==='cardone-capital'){
+  add(area,node('p','small','Interactive Cardone real-estate guide · independent preview. No live AI, phone calls, or investment advice without authorization.'));
+  const a=add(area,node('a','','Open interactive quick card ↗'));
+  a.href='./cardone-capital.html';a.target='_blank';a.rel='noopener noreferrer';
+ }else if(entry.cardId==='search-engine'){
   const form=add(area,node('form'));const input=add(form,node('input'));input.type='search';input.placeholder='Research a topic';
   const b=add(form,node('button','','Search with QuantaPhi ↗'));b.type='submit';
   form.addEventListener('submit',e=>{e.preventDefault();const q=input.value.trim();if(!q)return;window.open('https://quantaphi.org/?q='+encodeURIComponent(q),'_blank','noopener,noreferrer');});

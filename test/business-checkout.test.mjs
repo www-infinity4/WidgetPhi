@@ -4,7 +4,7 @@ import worker,{checkoutInput,safeReceipt} from '../workers/business-checkout/ind
 const req=(body)=>new Request('https://demo.example/api/business/checkout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
 function mocked(options={}){
  const saved=[],applied=[];
- const env={
+ const env={PAYMENT_GATEWAY_CHECKOUT_ORIGIN:'https://checkout.stripe.com',
  BUSINESS_AUTH:{verifyMerchantSession:async()=>options.actor||{merchantId:'cardoneDemo',role:'merchant_admin',verified:true,paymentsEnabled:true}},
  BUSINESS_CATALOG:{getApprovedProduct:async()=>options.product||{issuerAuthorized:true,status:'active',kind:'service',priceId:'price_abcdef',mode:'one_time',approvedPaymentTerms:true}},
  PAYMENT_GATEWAY:{
@@ -51,4 +51,10 @@ test('verified payment event strips provider card, payer and bank details',async
  const res=await worker.fetch(reqWeb,env);assert.equal(res.status,200);assert.equal(applied.length,1);
  reqWeb=new Request('https://demo.example/api/business/payment-webhook',{method:'POST',body:JSON.stringify(event)});
  assert.equal((await worker.fetch(reqWeb,env)).status,403);
+});
+
+test('provider redirect requires exact configured payment origin',async()=>{
+ const {env}=mocked();env.PAYMENT_GATEWAY_CHECKOUT_ORIGIN='https://fake.example';
+ const r=await worker.fetch(req({productId:'service123',idempotencyKey:'order_123456',consentToHostedCheckout:true}),env);
+ assert.equal(r.status,502);assert.equal((await r.json()).code,'invalid_provider_response');
 });

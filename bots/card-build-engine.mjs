@@ -19,12 +19,18 @@ export function build(request,preferred=''){
  /\b(shop phi|curated store|curated ads|advertisement card|storefront)\b/i.test(text)?'shop-phi':
  /\b(stock|stocks|ticker|equities|share price)\b/i.test(text)?'market-ticker':
  /\b(media star|audio gallery|curated media)\b/i.test(text)?'media-star':
+ /\b(news|headlines|research feed|journal feed|team recaps|source feed)\b/i.test(text)?'source-feed':
  /\b(youtube|video feed|video gallery)\b/i.test(text)?'video-feed':
  /\b(podcast|recorded spaces)\b/i.test(text)?'podcast-card':null;
  const widget=widgetPhi.list().includes(preferred)?preferred:match;
  if(!widget)return{status:'needs_adapter',reason:'No implemented card matches this request'};
  const spec={title:request.title};
- if(widget==='infinity-concept'){
+ if(widget==='source-feed'){
+  const feed=request.feed;
+  if(!feed||typeof feed!=='object'||!Array.isArray(feed.items))return{status:'needs_source_data',reason:'Connect an attributed source feed before building; a source URL alone is not fetched content'};
+  spec.items=feed.items;spec.topics=feed.topics;spec.seenUrls=feed.seenUrls;
+  if(!require('../src/widgets/source-feed').selectStories(spec).length)return{status:'needs_source_data',reason:'No unread verified stories match this feed'};
+ }else if(widget==='infinity-concept'){
   const selected=request.body.match(/^\s*Experiment(?:\s+ID)?\s*:\s*(physics-\d{3})\s*$/im)?.[1];
   if(/\b(physics experiment|physics concept)\b/i.test(text)){
    if(!selected)return{status:'needs_source_data',reason:'Specify Experiment: physics-001 (or another reviewed seed ID)'};

@@ -40,10 +40,10 @@ test('Media Star curation bot uses only supplied source URLs and leaves checkout
  assert.match(preview(a),/media-star-player.js/);
  assert.doesNotMatch(preview(a),/GEMINI_API_KEY|api_key|mint\(/i);
 });
-test('unsupported concepts are not mislabeled working software',()=>{
+test('unconnected news feeds are not mislabeled working software',()=>{
  const req=requestFromIssue(issue('News Phi AI', 'Make a real news card with fully working feeds'));
  const result=build(req);
- assert.equal(result.status,'needs_adapter');
+ assert.equal(result.status,'needs_source_data');
  assert.throws(()=>preview(result),/No working card/);
 });
 

@@ -1,18 +1,22 @@
 import {createRequire} from 'node:module';
+import {parseIssueFeed} from './feed-issue-intake.mjs';
 const require=createRequire(import.meta.url);
 const widgetPhi=require('../src/index.js');
 const physicsSeeds=require('../catalog/physics-experiments.json').experiments;
 const tidy=s=>String(s||'').trim().slice(0,2500);
 export function requestFromIssue(issue){
  if(!/^\[Card Build\]\s+/i.test(issue?.title||''))return null;
- const body=tidy(issue.body),title=tidy(body.match(/^\s*Title\s*:\s*(.+)$/im)?.[1]||issue.title.replace(/^\[Card Build\]\s*/i,'')).slice(0,100);
+ const body=String(issue.body||'').trim().slice(0,16000),title=tidy(body.match(/^\s*Title\s*:\s*(.+)$/im)?.[1]||issue.title.replace(/^\[Card Build\]\s*/i,'')).slice(0,100);
  const raw=body.match(/^\s*Symbols?\s*:\s*(.+)$/im)?.[1]||'';
  const symbols=[...new Set(raw.split(/[,\s]+/).map(s=>s.trim().toUpperCase()).filter(Boolean))].slice(0,15);
  const urls=[...new Set((body.match(/https:\/\/[^\s<>"']+/g)||[]).map(x=>x.replace(/[),.;]+$/,'')))].slice(0,40);
- return {number:issue.number,title,body,intent:issue.title||'',symbols,urls,author:issue.user?.login||''};
+ const parsedFeed=parseIssueFeed(body);
+ return {number:issue.number,title,body,intent:issue.title||'',symbols,urls,author:issue.user?.login||'',
+  ...(parsedFeed?.feed?{feed:parsedFeed.feed}:{}),...(parsedFeed?.error?{intakeError:parsedFeed.error}:{})};
 }
 export function build(request,preferred=''){
  if(!request)return{status:'not_a_card_job'};
+ if(request.intakeError)return{status:'needs_source_data',reason:request.intakeError};
  const text=request.title+' '+request.body+' '+(request.intent||'');
  const match=/\b(physics experiment|physics concept)\b/i.test(text)?'infinity-concept':
  /\b(infinity concept|concept card)\b/i.test(text)?'infinity-concept':

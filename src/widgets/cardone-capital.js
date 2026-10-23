@@ -20,7 +20,7 @@ function build(spec = {}) {
   // Only relative, same-origin, non-protocol URLs can reach a platform-managed Bubbles gateway.
   const agentEndpoint = /^\/(?!\/)[a-zA-Z0-9/_-]{1,180}$/.test(endpoint) ? endpoint : '';
   return `<section class="widgetphi-cardone" data-widgetphi-cardone data-phi-instance="${id}" data-agent-endpoint="${esc(agentEndpoint)}" style="font:inherit;color:#241d1b;background:#f8f3ed;border:1px solid #e9dcd0;border-radius:22px;padding:20px;max-width:640px">
- <p style="font-size:12px;letter-spacing:.12em;color:#9b2925;margin:0 0 6px">INDEPENDENT REAL ESTATE SOURCE CARD · NOT AN OFFICIAL AD</p>
+ <p style="font-size:12px;letter-spacing:.12em;color:#9b2925;margin:0 0 6px">${title} · INDEPENDENT REAL ESTATE SOURCE CARD · NOT AN OFFICIAL AD</p>
  <a href="${LINKS.featured}" target="_blank" rel="noopener noreferrer" aria-label="View Cardone Capital's 10X Westshore South property">
  <img loading="lazy" decoding="async" referrerpolicy="no-referrer-when-downgrade" src="${FEATURED_IMAGE}" width="1000" height="563" alt="Official Cardone Capital photograph: 10X Westshore multifamily apartment buildings and pool in Tampa" style="display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:15px;background:linear-gradient(125deg,#b9c1ca,#657a82)">
  </a>

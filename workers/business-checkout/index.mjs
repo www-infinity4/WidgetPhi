@@ -42,7 +42,7 @@ export default {
      let hosted;
      try{hosted=await env.PAYMENT_GATEWAY.createHostedCheckout({merchantId:actor.merchantId,productId:input.productId,priceId:product.priceId,mode:product.mode,idempotencyKey:input.idempotencyKey});}
      catch{return fail('checkout_unavailable',503);}
-     if(!hosted||!safe(hosted.checkoutId)||!HTTPS(hosted.url))return fail('invalid_provider_response',502);
+     if(!hosted||!safe(hosted.checkoutId)||!HTTPS(hosted.url)||!env.PAYMENT_GATEWAY_CHECKOUT_ORIGIN||new URL(hosted.url).origin!==env.PAYMENT_GATEWAY_CHECKOUT_ORIGIN)return fail('invalid_provider_response',502);
      try{await env.PRIVATE_RECEIPTS.reservePending({merchantId:actor.merchantId,productId:input.productId,checkoutId:hosted.checkoutId,idempotencyKey:input.idempotencyKey});}
      catch{return fail('private_ledger_unavailable',503);}
      return json({ok:true,checkoutUrl:hosted.url,checkoutId:hosted.checkoutId,providerHosted:true,noRawPaymentData:true});

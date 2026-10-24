@@ -689,6 +689,28 @@
           "default": "cardone-guide"
         }
       ]
+    },
+    {
+      "id": "youtube-trending-reel",
+      "name": "YouTube Trending Reel",
+      "category": "Media & Entertainment",
+      "source": "WidgetPhi user request",
+      "readiness": "template",
+      "summary": "Build the existing WidgetPhi and QuantaPhi YouTube trending quick card into a real video reel. Research official YouTube Data API mostPopular and IFrame Player API and source actual video IDs with attribution, real timestamps, mobile player, consented Bubbles ",
+      "settings": [
+        {
+          "key": "title",
+          "label": "Card name",
+          "type": "text",
+          "default": "YouTube Trending Reel"
+        },
+        {
+          "key": "index",
+          "label": "Owner content and topic index",
+          "type": "textarea",
+          "default": ""
+        }
+      ]
     }
   ]
 }

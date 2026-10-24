@@ -1,0 +1,31 @@
+{
+  "schema": "widgetphi.card-build-job",
+  "version": 1,
+  "jobId": "issue-74",
+  "request": {
+    "schema": "widgetphi.card-request",
+    "version": 1,
+    "kind": "new",
+    "name": "YouTube Trending Reel",
+    "cardId": "youtube-trending-reel",
+    "category": "Media & Entertainment",
+    "description": "Build the existing WidgetPhi and QuantaPhi YouTube trending quick card into a real video reel. Research official YouTube Data API mostPopular and IFrame Player API and source actual video IDs with attribution, real timestamps, mobile player, consented Bubbles specialist and safe offline fallback. Check existing video-feed adapter before coding. No invented ranking, scraped sessions, code execution, key exposure, StarCoin charge or false deployment. One provider job at a time.",
+    "setting": null,
+    "issueNumber": 74,
+    "source": null,
+    "requestedBy": "www-infinity4"
+  },
+  "state": "requires-build-review",
+  "codeGenerated": false,
+  "tested": false,
+  "deployed": false,
+  "paid": false,
+  "handoff": {
+    "blue": "Validate source, tenant data and reusable setting schema",
+    "green": "Implement and integrate card logic in WidgetPhi before publishing",
+    "pink": "Test accessibility, callbacks and regressions",
+    "purple": "Approve documented evidence and release"
+  },
+  "outcome": "new-template",
+  "buildRequestEvidence": "Request was validated; template changes are not production code."
+}

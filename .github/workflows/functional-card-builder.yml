@@ -7,6 +7,7 @@ on:
       - 'src/widgets/infinity-concept.js'
       - 'catalog/physics-experiments.json'
       - 'bots/card-build-runner.mjs'
+      - 'bots/card-build-branch.mjs'
       - 'bots/gemini-card-planner.mjs'
       - '.github/workflows/functional-card-builder.yml'
       - 'catalog/requests/**'
@@ -24,8 +25,12 @@ on:
     paths:
       - 'bots/card-build-engine.mjs'
       - 'bots/card-build-runner.mjs'
+      - 'bots/card-build-branch.mjs'
       - 'bots/gemini-card-planner.mjs'
       - 'test/card-build-runner.test.mjs'
+      - 'test/card-build-branch.test.mjs'
+      - 'bots/safe-preview-merge.mjs'
+      - 'test/safe-preview-merge.test.mjs'
       - 'src/widgets/infinity-concept.js'
       - 'catalog/physics-experiments.json'
       - 'catalog/generated/**'
@@ -55,6 +60,7 @@ jobs:
         run: |
           node --check bots/card-build-engine.mjs
           node --check bots/card-build-runner.mjs
+          node --check bots/card-build-branch.mjs
           node --check bots/gemini-card-planner.mjs
           npm test
       - name: Build existing working widgets into reviewable PRs

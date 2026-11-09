@@ -4,6 +4,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {requestFromIssue,build,preview} from './card-build-engine.mjs';
 import {askGemini} from './gemini-card-planner.mjs';
+import {createCardBuildBranch} from './card-build-branch.mjs';
 const REPO='www-infinity4/WidgetPhi';
 const API='https://api.github.com/repos/'+REPO;
 const token=process.env.GITHUB_TOKEN||'';
@@ -45,7 +46,7 @@ async function processJob(issue){
    '<!-- widgetphi-functional-blocked:'+id+':'+result.status+' -->');
   return{status:result.status,reason:result.reason};
  }
- const branch='bot/card-build-'+id;
+ const branch=createCardBuildBranch({issueNumber:issue.number,runId:process.env.GITHUB_RUN_ID,attempt:process.env.GITHUB_RUN_ATTEMPT});
  git('switch','-c',branch);
  try{
   await mkdir('catalog/generated',{recursive:true});

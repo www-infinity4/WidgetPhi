@@ -19,7 +19,7 @@ export function hasCurrentIndependentReview(pr,reviews=[]){
  for(const review of reviews){
   const login=String(review?.user?.login||'').toLowerCase();
   if(!login||login===String(pr?.user?.login||'').toLowerCase()||
-   /\\[bot\\]$/.test(login)||review.user?.type==='Bot'||
+   /\[bot\]$/.test(login)||review.user?.type==='Bot'||
    !['OWNER','MEMBER','COLLABORATOR'].includes(review.author_association))continue;
   if(!['APPROVED','CHANGES_REQUESTED','DISMISSED'].includes(review.state))continue;
   const date=Date.parse(review.submitted_at||'');

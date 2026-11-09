@@ -2,6 +2,7 @@
  * Cross-repository code, private cloud deployments and wallet edits never pass. */
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
+import {parseCardBuildBranch} from './card-build-branch.mjs';
 const API='https://api.github.com/repos/www-infinity4/WidgetPhi';
 const REPO='www-infinity4/WidgetPhi';
 const TOKEN=process.env.GITHUB_TOKEN||'';
@@ -14,9 +15,10 @@ async function github(path,{method='GET',body}={}){
 }
 export function allow(pr,paths,checkRuns,{localSuitePassed=false}={}){
  if(!pr||pr.base?.ref!=='main'||pr.head?.repo?.full_name!==REPO)return false;
- if(!/^bot\/card-build-issue-\d+$/.test(pr.head.ref))return false;
+ const branchIdentity=parseCardBuildBranch(pr.head.ref);
+ if(!branchIdentity)return false;
  if(pr.user?.login!=='github-actions[bot]')return false;
- const id=pr.head.ref.split('-').at(-1);
+ const id=String(branchIdentity.issueNumber);
  const expected=['catalog/generated/issue-'+id+'.html','catalog/jobs/issue-'+id+'-functional.json'];
  if(paths.length!==2||!expected.every(path=>paths.includes(path)))return false;
  const matched=checkRuns.filter(x=>x.name==='functional-builder'&&x.head_sha===pr.head.sha);
@@ -25,7 +27,7 @@ export function allow(pr,paths,checkRuns,{localSuitePassed=false}={}){
 }
 export async function mergeSafe({api=github}={}){
  const prs=await api('/pulls?state=open&per_page=100');const results=[];
- for(const summary of prs.filter(x=>/^bot\/card-build-issue-\d+$/.test(x.head?.ref||'')).slice(0,12)){
+ for(const summary of prs.filter(x=>parseCardBuildBranch(x.head?.ref)).slice(0,12)){
   try{
    const pr=await api('/pulls/'+summary.number);
    const files=await api('/pulls/'+summary.number+'/files?per_page=100');
@@ -37,7 +39,7 @@ export async function mergeSafe({api=github}={}){
     results.push({pr:summary.number,status:'source_shape_or_ci_blocked'});continue
    }
    if(!/^[a-f0-9]{40}$/.test(pr.head.sha)){results.push({pr:summary.number,status:'invalid_sha'});continue}
-   const issueId=pr.head.ref.split('-').at(-1);
+   const issueId=String(parseCardBuildBranch(pr.head.ref)?.issueNumber||'');
    let suitePassed=false;
    try{
     execFileSync('git',['fetch','origin',pr.head.sha],{stdio:'pipe'});

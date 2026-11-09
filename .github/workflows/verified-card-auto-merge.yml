@@ -29,7 +29,8 @@ jobs:
       - name: Check safe merger and bot artifact rules
         run: |
           node --check bots/safe-preview-merge.mjs
-          node --test test/safe-preview-merge.test.mjs
+          node --check bots/card-build-branch.mjs
+          node --test test/safe-preview-merge.test.mjs test/card-build-branch.test.mjs
       - name: Merge only verified source-linked bot previews
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

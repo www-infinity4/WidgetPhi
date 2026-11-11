@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Infinity Discovery · Physics & Julius Sumner Miller</title>
+<style>
+:root{color-scheme:dark;font:17px/1.55 system-ui,Arial,sans-serif;background:#110b1b;color:#f8ebff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#4d2f65,#20132f 50%,#0e0917);min-height:100vh}
+main{max-width:850px;margin:auto;padding:16px 13px 60px}header{padding:16px 5px 12px}
+.eyebrow{color:#f0c77a;font-size:.8rem;letter-spacing:.13em;text-transform:uppercase;font-weight:800}
+h1{font-size:clamp(1.8rem,6vw,2.8rem);line-height:1.17;margin:7px 0}h2{font-size:clamp(1.27rem,4.8vw,1.8rem);line-height:1.26;margin:8px 0}
+p{margin:7px 0;max-width:72ch}p.note{color:#ddcfeb;font-size:.9rem}
+nav{display:flex;gap:10px;margin:15px 0;flex-wrap:wrap}
+button{font:inherit;min-height:50px;padding:9px 16px;border:2px solid #bb9756;border-radius:13px;background:#352347;color:#fff4ce;font-weight:750;cursor:pointer;flex:1;min-width:105px}
+button[aria-pressed="true"]{background:#efd093;color:#20112b;border-color:#ffe9bd}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,a:focus-visible,iframe:focus-visible{outline:3px solid #f7da98;outline-offset:3px}
+.scene{background:linear-gradient(145deg,#2f1b45,#130f22);border:1px solid #ad8b5b;box-shadow:0 12px 30px #0009;border-radius:21px;padding:clamp(13px,4vw,27px);min-height:270px}
+.counter{font-size:.83rem;color:#d8c3e8;font-weight:750;letter-spacing:.05em}
+.detail{font-size:1rem;color:#e8dff2}.tags{color:#f0d598;font-size:.88rem}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+.actions a{display:inline-flex;align-items:center;justify-content:center;min-height:49px;padding:10px 15px;border:1px solid #f0ce8e;border-radius:11px;background:#332141;color:#ffdf9d;text-decoration:none;font-weight:700;overflow-wrap:anywhere}
+.actions a:focus-visible{outline-offset:4px}
+iframe{width:100%;border:0;border-radius:13px;background:#0f0d1b;min-height:510px}
+.archive{border-left:3px solid #e8bd6b;padding-left:12px}
+small{font-size:.78rem;color:#d7c7de}
+@media(max-width:360px){main{padding:10px 8px 42px}button{padding:8px}.scene{padding:13px}iframe{min-height:600px}}
+</style>
+</head>
+<body><main>
+<header>
+<p class="eyebrow">INFINITY 2026® · Oracle Octaves · Physics Lab</p>
+<h1>Why does it happen?</h1>
+<p>Explore historic Julius Sumner Miller educational clips, then investigate original, source-backed physics experiments using the existing Infinity Concept Cards.</p>
+<p class="note">Independent educational presentation; not affiliated with Julius Sumner Miller's estate, ABC or Australian Screen Online. Historical films remain with their publishers, linked rather than embedded or copied.</p>
+</header>
+<nav aria-label="Physics discovery category">
+<button type="button" id="show-archive" aria-pressed="true">Historical films</button>
+<button type="button" id="show-experiments" aria-pressed="false">Try experiments</button>
+</nav>
+<div class="scene">
+<div id="counter" class="counter" aria-live="polite">Loading verified source records</div>
+<article id="content" aria-live="polite"></article>
+<nav aria-label="Carousel navigation">
+<button id="prev" type="button">← Previous</button>
+<button id="next" type="button">Next →</button>
+</nav>
+</div>
+<p class="note">Archive viewing is controlled by the original publisher. Experiment source references are educational links, not permission to duplicate publisher images or video. Nothing here creates a wallet charge or credit, and a source-built preview is not proof of a deployed QuantaPhi Quick Card.</p>
+</main>
+<script type="module" src="./physics-discovery.mjs"></script>
+</body></html>

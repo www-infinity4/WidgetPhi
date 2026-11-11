@@ -1,0 +1,26 @@
+name: Physics discovery and historic source rights
+on:
+  pull_request:
+    paths:
+      - 'browser/physics-discovery.html'
+      - 'browser/physics-discovery.mjs'
+      - 'browser/physics-discovery-data.mjs'
+      - 'test/physics-discovery.test.mjs'
+      - '.github/workflows/physics-discovery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check browser/physics-discovery.mjs
+      - run: node --check browser/physics-discovery-data.mjs
+      - run: node --test test/physics-discovery.test.mjs test/physics-cards.test.mjs
+      - run: npm test

@@ -1,0 +1,18 @@
+{
+  "schema": "widgetphi.functional-build/v1",
+  "issueNumber": 22,
+  "request": "Market Watch Demo",
+  "widget": "market-ticker",
+  "stockSymbols": [
+    "NASDAQ:AAPL",
+    "NASDAQ:MSFT"
+  ],
+  "sourceUrls": [],
+  "actualAdapter": "src/widgets/market-ticker.js",
+  "status": "tested_native_component",
+  "creator": "www-infinity4",
+  "modelPlanning": "not_needed",
+  "walletCharged": false,
+  "deployed": false,
+  "authorReview": "pending"
+}
